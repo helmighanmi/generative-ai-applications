@@ -1,0 +1,36 @@
+# ── API Dockerfile ─────────────────────────────────────────────────────────
+# Uses CPU-only PyTorch to keep the image lighter.
+# Model weights are downloaded once and cached in a named Docker volume.
+
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# System deps
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential curl git \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Python deps (CPU torch only)
+COPY api/requirements.txt .
+RUN pip install --no-cache-dir --upgrade pip \
+    && pip install --no-cache-dir -r requirements.txt
+
+# Copy application code
+COPY api/ ./api/
+
+# Model cache directory (will be mounted as a named volume)
+RUN mkdir -p /model
+ENV MODEL_CACHE_DIR=/model
+ENV HF_HOME=/model/hf_cache
+
+# Download the model at build time so the container is self-contained.
+# Comment this out if you prefer lazy-loading on first request.
+#RUN python -c "\
+#from sentence_transformers import SentenceTransformer; \
+#SentenceTransformer('perplexity-ai/pplx-embed-v1-0.6B', \
+#  cache_folder='/model', trust_remote_code=True, device='cpu')"
+
+EXPOSE 8000
+
+CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1"]

@@ -1,0 +1,108 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+
+[project]
+name = "pplx-embed"
+version = "1.0.0"
+description = "100% local text embedding stack using Perplexity AI pplx-embed-v1-0.6B — FastAPI + Streamlit + Embedding Projector"
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.10"
+
+authors = [
+  { name = "Your Name", email = "you@example.com" }
+]
+
+keywords = ["embeddings", "nlp", "rag", "fastapi", "sentence-transformers", "pplx-embed", "local-ai"]
+
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+# ── Core runtime dependencies ──────────────────────────────────────────────
+dependencies = [
+  # Model
+  "sentence-transformers>=2.2.2,<3.0",
+  "transformers>=4.36,<5.0",
+  "torch>=2.2.0",          # CPU-only wheels are fine; see [project.optional-dependencies]
+  "numpy>=1.26.0,<2.0",
+  # API
+  "fastapi>=0.115.0",
+  "uvicorn[standard]>=0.30.0",
+  "pydantic>=2.8.0",
+  # Visualisation (projector)
+  "scikit-learn>=1.5.0",
+  "plotly>=5.24.0",
+]
+
+[project.optional-dependencies]
+
+# pip install -e .[cpu]   ← installs CPU-only torch (much smaller)
+cpu = [
+"torch>=2.2.0"
+  ]
+
+# pip install -e .[ui]   ← adds Streamlit + dependencies for the UI
+ui = [
+  "streamlit>=1.38.0",
+  "requests>=2.32.0",
+  "pandas>=2.2.0",
+  "plotly>=5.24.0",
+]
+
+# pip install -e .[projector]   ← dimensionality reduction extras
+projector = [
+  "umap-learn>=0.5.6",
+  "scikit-learn>=1.5.0",
+  "plotly>=5.24.0",
+]
+
+# pip install -e .[dev]   ← everything needed to develop / run locally
+dev = [
+  "pplx-embed[ui,projector]",
+  "httpx>=0.27.0",          # for testing the API
+  "pytest>=8.0.0",
+  "pytest-asyncio>=0.24.0",
+  "ruff>=0.5.0",            # linter
+  "mypy>=1.11.0",           # type checker
+  "pre-commit>=3.8.0",
+  "ipykernel>=6.29.0",      # Jupyter notebooks
+  "ipywidgets>=8.1.0",
+]
+
+# ── Entry points / CLI ─────────────────────────────────────────────────────
+[project.scripts]
+pplx-api        = "api.main:app"
+pplx-projector  = "scripts.export_projector:main"
+
+# ── Tool configurations ────────────────────────────────────────────────────
+
+[tool.setuptools.packages.find]
+include = ["api*", "streamlit_app*", "scripts*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.11"
+ignore_missing_imports = true
+strict = false
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]

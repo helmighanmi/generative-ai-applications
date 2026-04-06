@@ -1,0 +1,50 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Model weights — NEVER commit these (can be GBs)
+model/
+*.bin
+*.safetensors
+*.onnx
+*.pt
+*.pth
+
+# Local process files
+.pids
+
+# Streamlit
+.streamlit/
+
+# Outputs
+projector_demo.html
+projector.html
+embeddings.json
+
+# Secrets
+.env
+.env.*
+.secrets.baseline
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+*.log

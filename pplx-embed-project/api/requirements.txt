@@ -1,0 +1,7 @@
+fastapi==0.115.0
+uvicorn[standard]==0.30.6
+sentence-transformers>=3.0.0
+
+numpy==1.26.4
+torch==2.2.0 # CPU-only torch to keep image size smaller
+pydantic==2.8.2

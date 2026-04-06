@@ -1,0 +1,57 @@
+version: "3.9"
+
+# ─────────────────────────────────────────────────────────────
+#  pplx-embed local stack
+#  - api        FastAPI embedding service  → http://localhost:8000
+#  - streamlit  Streamlit UI               → http://localhost:8501
+#
+#  Model weights cached in a named volume (survives container restarts)
+# ─────────────────────────────────────────────────────────────
+
+services:
+
+  api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.api
+    container_name: pplx_embed_api
+    ports:
+      - "8000:8000"
+    volumes:
+      - model_cache:/model      # persists model weights across restarts
+    environment:
+      - MODEL_CACHE_DIR=/model
+      - HF_HOME=/model/hf_cache
+      # Disable HuggingFace telemetry
+      - TRANSFORMERS_NO_ADVISORY_WARNINGS=1
+      - HF_HUB_DISABLE_TELEMETRY=1
+    # CPU-only: no GPU reservation needed
+    deploy:
+      resources:
+        limits:
+          memory: 4G          # pplx-embed-v1-0.6B needs ~1.5 GB RAM
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 60s       # model loading takes a little time
+
+  streamlit:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.streamlit
+    container_name: pplx_embed_ui
+    ports:
+      - "8501:8501"
+    environment:
+      - API_URL=http://api:8000   # Docker internal DNS
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  model_cache:
+    name: pplx_embed_model_cache
