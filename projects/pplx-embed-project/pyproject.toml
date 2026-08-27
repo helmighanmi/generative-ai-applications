@@ -19,7 +19,7 @@ authors = [{name = "GHANMI Helmi"}]
 keywords = ["embeddings", "nlp", "rag", "fastapi", "sentence-transformers", "local-ai"]
 dependencies = [
   "sentence-transformers>=5.2,<7",
-  "transformers>=4.51,<5",
+  "transformers>=4.51,<6",
   "torch>=2.2,<3",
   "numpy>=1.26,<3",
   "huggingface-hub>=0.30,<2",
