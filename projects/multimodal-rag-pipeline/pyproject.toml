@@ -33,7 +33,7 @@ ai = [
   "sentence-transformers>=3,<7",
   "transformers>=4.45,<5",
 ]
-dev = ["multimodal-rag-pipeline[ai]", "pytest>=8.3,<9", "ruff>=0.12,<1"]
+dev = ["multimodal-rag-pipeline[ai]", "pytest>=8.3,<10", "ruff>=0.12,<1"]
 
 [project.scripts]
 multimodal-rag = "multimodal_rag.cli:main"
