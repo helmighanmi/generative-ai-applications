@@ -1,0 +1,49 @@
+# Path: projects/multimodal-rag-pipeline/pyproject.toml
+# Author: GHANMI Helmi
+# Current Role: AI Engineer
+# Past Role: Researcher in Applied Mathematics
+# Research Profile: https://www.researchgate.net/profile/Ghanmi-Helmi
+
+[build-system]
+requires = ["setuptools>=75", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "multimodal-rag-pipeline"
+version = "1.0.0"
+description = "Configurable multimodal PDF retrieval-augmented generation pipeline"
+requires-python = ">=3.11,<3.12"
+authors = [{name = "GHANMI Helmi"}]
+license = "MIT"
+dependencies = [
+  "numpy>=1.26,<3",
+  "PyYAML>=6,<7",
+  "requests>=2.32,<3",
+  "pymupdf>=1.24,<2",
+  "tabula-py>=2.9,<3",
+  "Pillow>=10,<12",
+  "faiss-cpu>=1.8,<2",
+  "langchain-text-splitters>=0.3,<1",
+  "tqdm>=4.66,<5",
+]
+
+[project.optional-dependencies]
+ai = [
+  "openai>=1.40,<3",
+  "sentence-transformers>=3,<7",
+  "transformers>=4.45,<5",
+]
+dev = ["multimodal-rag-pipeline[ai]", "pytest>=8.3,<9", "ruff>=0.12,<1"]
+
+[project.scripts]
+multimodal-rag = "multimodal_rag.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100

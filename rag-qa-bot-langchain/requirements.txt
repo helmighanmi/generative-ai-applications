@@ -1,6 +1,0 @@
-langchain
-pypdf
-chromadb
-sentence-transformers
-huggingface_hub
-gradio

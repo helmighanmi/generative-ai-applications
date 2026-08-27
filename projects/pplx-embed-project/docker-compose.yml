@@ -1,0 +1,42 @@
+# Path: projects/pplx-embed-project/docker-compose.yml
+# Author: GHANMI Helmi
+# Current Role: AI Engineer
+# Past Role: Researcher in Applied Mathematics
+# Research Profile: https://www.researchgate.net/profile/Ghanmi-Helmi
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.api
+    ports: ["8000:8000"]
+    volumes:
+      - model_cache:/model
+    environment:
+      MODEL_CACHE_DIR: /model
+      MODEL_AUTO_DOWNLOAD: "true"
+      HF_HOME: /model/hf_cache
+      HF_HUB_DISABLE_TELEMETRY: "1"
+      CORS_ORIGINS: http://localhost:8501
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 180s
+
+  streamlit:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.streamlit
+    ports: ["8501:8501"]
+    environment:
+      API_URL: http://api:8000
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  model_cache:

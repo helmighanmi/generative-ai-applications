@@ -1,0 +1,40 @@
+# Path: projects/multimodal-rag-pipeline/config/config.yaml
+# Author: GHANMI Helmi
+# Current Role: AI Engineer
+# Past Role: Researcher in Applied Mathematics
+# Research Profile: https://www.researchgate.net/profile/Ghanmi-Helmi
+
+model:
+  embedding:
+    # Stub is the safe reproducible default. Override with RAG_EMBEDDING_PROVIDER.
+    provider: "stub"  # stub | openai | huggingface | bedrock
+    model_id: "sentence-transformers/all-MiniLM-L6-v2"
+    dim: 384
+  image_encoder: "openai/clip-vit-base-patch32"
+  llm:
+    provider: "stub"  # stub | openai | huggingface | bedrock
+    model_id: "gpt-4o-mini"
+    temperature: 0.3
+    max_tokens: 512
+
+retriever:
+  top_k: 5
+  similarity_metric: "l2"
+
+data:
+  input_dir: "data/input"
+  output_dir: "data/output"
+  persist_dir: "data/index"
+
+vectorstore:
+  type: "faiss"
+  index_path: "data/index/faiss.index"
+  metadata_path: "data/index/metadata.json"
+
+pipeline:
+  chunk_size: 500
+  chunk_overlap: 50
+  use_page_images: true
+  use_tables: true
+  use_text: true
+  use_images: true

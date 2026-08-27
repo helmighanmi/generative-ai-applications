@@ -1,0 +1,13 @@
+# Path: projects/pplx-embed-project/streamlit_app/requirements.txt
+# Author: GHANMI Helmi
+# Current Role: AI Engineer
+# Past Role: Researcher in Applied Mathematics
+# Research Profile: https://www.researchgate.net/profile/Ghanmi-Helmi
+
+streamlit>=1.38,<2
+requests>=2.32,<3
+numpy>=1.26,<3
+pandas>=2.2,<3
+plotly>=5.24,<7
+scikit-learn>=1.5,<2
+umap-learn>=0.5.6,<1

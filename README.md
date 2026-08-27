@@ -1,101 +1,118 @@
-# 🤖 generative-ai-applications
+<!--
+Path: README.md
+Author: GHANMI Helmi
+Current Role: AI Engineer
+Past Role: Researcher in Applied Mathematics
+Research Profile: https://www.researchgate.net/profile/Ghanmi-Helmi
+-->
 
-This repository is a collection of **Generative AI experiments and pipelines**, with a focus on **RAG (Retrieval-Augmented Generation)** and **LangChain**.  
-It is organized into multiple sub-projects, each exploring a different approach.
+# Generative AI Applications — Engineering Portfolio
 
----
+Production-minded AI engineering monorepo covering document intelligence, retrieval-augmented generation (RAG), local embedding services, multimodal retrieval, testing, containerization, CI/CD, and operational practices.
 
-## 📂 Repository Structure
+> **Engineering goal:** make every project understandable, testable, reproducible, and runnable by another engineer from a clean checkout.
 
+## Engineering lifecycle demonstrated
+
+```text
+Problem / experiment
+      │
+      ▼
+Architecture & ADRs
+      │
+      ▼
+Implementation ──► Unit tests
+      │                 │
+      ▼                 ▼
+AI evaluation ───► Integration / smoke tests
+      │
+      ▼
+Container build
+      │
+      ▼
+CI quality gates ──► Security checks
+      │
+      ▼
+Runnable service / reproducible experiment
+      │
+      ▼
+Logging, health checks, runbooks
 ```
-Generative-ai-applications/
-├── langchain/                  # LangChain examples and utilities
-├── multimodal-rag-pipeline/    # Demo: multimodal RAG (PDFs with text, tables, images)
-├── rag-qa-bot-langchain/       # Q&A bot powered by LangChain + RAG
-└── README.md                   
-```
 
----
+## Repository map
 
-## 🚀 Sub-Projects
+| Project | Focus | Primary engineering signal |
+|---|---|---|
+| [`projects/document-parsing`](projects/document-parsing/) | PDF page classification | Applied ML + deterministic heuristics + calibration |
+| [`projects/langchain`](projects/langchain/) | LangChain foundations | Framework experiments kept isolated from production services |
+| [`projects/multimodal-rag-pipeline`](projects/multimodal-rag-pipeline/) | Multimodal PDF RAG | Provider abstraction, FAISS retrieval, configurable pipeline |
+| [`projects/pplx-embed-project`](projects/pplx-embed-project/) | Local embedding API + UI | FastAPI, Streamlit, Docker Compose, health checks |
+| [`projects/rag-qa-bot-langchain`](projects/rag-qa-bot-langchain/) | PDF QA / RAG | Retrieval pipeline with modern LangChain package boundaries |
 
-### 🔹 `langchain/`
-Experiments and examples using the [LangChain](https://www.langchain.com/) framework.  
-Covers document loaders, chains, prompt templates, and basic RAG workflows.
+Cross-cutting engineering material lives in [`docs/`](docs/), root automation in [`Makefile`](Makefile), and GitHub automation in [`.github/workflows`](.github/workflows/).
 
----
+## Python baseline
 
-### 🔹 `multimodal-rag-pipeline/`
-A **demo RAG pipeline** that ingests a single PDF, extracts **text, tables, and images**, generates embeddings, stores them in **FAISS**, and allows you to **query and generate answers**.  
+**Python 3.11** is the repository baseline. The projects combine scientific Python, PyTorch/sentence-transformers, FAISS, OpenCV/PyMuPDF, and LangChain. Python 3.11 is intentionally conservative for AI/ML binary-wheel compatibility while remaining actively supported and modern.
 
-- PDF ingestion: `pymupdf`, `tabula`  
-- Embeddings: HuggingFace / OpenAI / Stub (configurable)  
-- Vector store: FAISS  
-- Demo notebook included  
+See [`docs/decisions/001-python-runtime.md`](docs/decisions/001-python-runtime.md) for the decision record.
 
-📖 See the [README here](multimodal-rag-pipeline/README.md).
-
----
-
-### 🔹 `rag-qa-bot-langchain/`
-A **RAG-powered Q&A chatbot** built with **LangChain**.  
-Supports conversational interaction over indexed documents.
-
-- Uses LangChain document loaders and vector stores  
-- Embeddings: OpenAI / HuggingFace  
-- LLMs: OpenAI GPT models or local HuggingFace models  
-
----
-
-## 🛠️ Installation
-
-Clone the repo:
+## Quick start
 
 ```bash
-git clone https://github.com/helmighanmi/generative-ai-applications.git
-cd Generative-ai-applications
+# Create a root development environment for repository tooling
+python3.11 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+pip install -e '.[dev]'
+
+# Repository-wide static checks
+make lint
+make format-check
+make compile
+
+# Run lightweight tests that do not download large models
+make test
 ```
 
-Each sub-project has its own `requirements.txt`.  
-For example, to install the multimodal RAG demo:
+Each subproject has its own installation and run instructions because their runtime dependency sets differ significantly.
 
-```bash
-cd multimodal-rag-pipeline
-pip install -r requirements.txt
-```
+## Quality gates
 
----
+Pull requests are expected to pass:
 
-## 🐳 Docker
+- Python syntax compilation
+- Ruff lint and formatting checks
+- project unit tests
+- dependency metadata validation
+- secret-pattern checks
+- Docker build validation for service projects
+- CodeQL security analysis
 
-Some sub-projects include Dockerfiles.  
-Example for the multimodal RAG pipeline:
+CI never converts a failing test into a successful build.
 
-```bash
-cd multimodal-rag-pipeline
-docker build -t multimodal-rag .
-docker run -p 8888:8888 multimodal-rag
-```
+## Public repository / secrets policy
 
----
+No credentials are required in source control. Copy `.env.example` files where provided and inject secrets at runtime. Never commit `.env`, API keys, cloud credentials, model access tokens, or private datasets.
 
-## 🔑 Environment Variables
+The example values in this repository are placeholders only.
 
-Create a `.env` file at the project root or inside each sub-project with:
+## Documentation
 
-```bash
-OPENAI_API_KEY=your_openai_api_key
-HUGGINGFACE_HUB_TOKEN=your_hf_token
-AWS_ACCESS_KEY_ID=your_aws_key
-AWS_SECRET_ACCESS_KEY=your_aws_secret
-AWS_DEFAULT_REGION= # us-east-1 or else
-```
+- [`docs/architecture.md`](docs/architecture.md) — monorepo architecture and boundaries
+- [`docs/development.md`](docs/development.md) — local development workflow
+- [`docs/testing.md`](docs/testing.md) — software tests vs AI evaluation
+- [`docs/security.md`](docs/security.md) — public-repository security practices
+- [`docs/runbook.md`](docs/runbook.md) — operational checks and troubleshooting
+- [`docs/decisions/`](docs/decisions/) — architecture decision records (ADRs)
 
----
+## Author
 
-## 👤 Author
-```bash
-Firstname: Helmi 
-Name: Ghanmi
-Data Scientist
-📅 2025-09-26
+**GHANMI Helmi**  
+Current Role: **AI Engineer**  
+Past Role: **Researcher in Applied Mathematics**  
+Research profile: <https://www.researchgate.net/profile/Ghanmi-Helmi>
+
+## License
+
+MIT — see [`LICENSE`](LICENSE).

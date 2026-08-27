@@ -1,0 +1,8 @@
+# Path: projects/multimodal-rag-pipeline/requirements.txt
+# Author: GHANMI Helmi
+# Current Role: AI Engineer
+# Past Role: Researcher in Applied Mathematics
+# Research Profile: https://www.researchgate.net/profile/Ghanmi-Helmi
+
+# Prefer `pip install -e .` so pyproject.toml remains the dependency source of truth.
+-e .

@@ -1,0 +1,43 @@
+# Path: projects/rag-qa-bot-langchain/pyproject.toml
+# Author: GHANMI Helmi
+# Current Role: AI Engineer
+# Past Role: Researcher in Applied Mathematics
+# Research Profile: https://www.researchgate.net/profile/Ghanmi-Helmi
+
+[build-system]
+requires = ["setuptools>=75", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rag-qa-bot-langchain"
+version = "1.0.0"
+description = "PDF retrieval-augmented QA with modern LangChain package boundaries"
+requires-python = ">=3.11,<3.12"
+authors = [{name = "GHANMI Helmi"}]
+license = "MIT"
+dependencies = [
+  "pypdf>=5,<7",
+  "chromadb>=1,<2",
+  "sentence-transformers>=5.2,<7",
+  "huggingface-hub>=0.30,<2",
+  "langchain-community>=0.3,<2",
+  "langchain-text-splitters>=0.3,<2",
+  "langchain-huggingface>=0.2,<2",
+  "langchain-chroma>=0.2,<2",
+]
+
+[project.scripts]
+rag-qa = "rag_qa_bot.qa_bot:main"
+
+[project.optional-dependencies]
+dev = ["pytest>=8.3,<9", "ruff>=0.12,<1"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100

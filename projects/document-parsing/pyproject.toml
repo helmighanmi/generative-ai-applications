@@ -1,0 +1,39 @@
+# Path: projects/document-parsing/pyproject.toml
+# Author: GHANMI Helmi
+# Current Role: AI Engineer
+# Past Role: Researcher in Applied Mathematics
+# Research Profile: https://www.researchgate.net/profile/Ghanmi-Helmi
+
+[build-system]
+requires = ["setuptools>=75", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pdf-page-classifier"
+version = "1.0.0"
+description = "Interpretable and adaptive PDF page classification"
+requires-python = ">=3.11,<3.12"
+authors = [{name = "GHANMI Helmi"}]
+license = "MIT"
+dependencies = [
+  "numpy>=1.26,<3",
+  "pymupdf>=1.24,<2",
+  "opencv-python-headless>=4.10,<5",
+  "scikit-learn>=1.5,<2",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.3,<9", "ruff>=0.12,<1"]
+
+[project.scripts]
+pdf-page-classifier = "pdf_page_classifier.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100

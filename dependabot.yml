@@ -1,0 +1,24 @@
+# Path: .github/dependabot.yml
+# Author: GHANMI Helmi
+# Current Role: AI Engineer
+# Past Role: Researcher in Applied Mathematics
+# Research Profile: https://www.researchgate.net/profile/Ghanmi-Helmi
+
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "pip"
+    directory: "/projects/pplx-embed-project"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "pip"
+    directory: "/projects/multimodal-rag-pipeline"
+    schedule:
+      interval: "weekly"

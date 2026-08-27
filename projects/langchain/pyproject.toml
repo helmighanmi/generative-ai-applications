@@ -1,0 +1,32 @@
+# Path: projects/langchain/pyproject.toml
+# Author: GHANMI Helmi
+# Current Role: AI Engineer
+# Past Role: Researcher in Applied Mathematics
+# Research Profile: https://www.researchgate.net/profile/Ghanmi-Helmi
+
+[build-system]
+requires = ["setuptools>=75", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "langchain-foundations"
+version = "1.0.0"
+description = "Isolated LangChain learning and document-loading experiments"
+requires-python = ">=3.11,<3.12"
+authors = [{name = "GHANMI Helmi"}]
+license = "MIT"
+dependencies = [
+  "langchain>=1.3,<2",
+  "langchain-community>=0.3,<2",
+  "langchain-openai>=0.3,<2",
+  "pypdf>=5,<7",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.3,<9", "ruff>=0.12,<1"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

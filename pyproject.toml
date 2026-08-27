@@ -1,0 +1,58 @@
+# Path: pyproject.toml
+# Author: GHANMI Helmi
+# Current Role: AI Engineer
+# Past Role: Researcher in Applied Mathematics
+# Research Profile: https://www.researchgate.net/profile/Ghanmi-Helmi
+
+[build-system]
+requires = ["setuptools>=75", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "generative-ai-applications-engineering"
+version = "2.0.0"
+description = "Engineering portfolio for production-minded generative AI applications"
+requires-python = ">=3.11,<3.12"
+authors = [{name = "GHANMI Helmi"}]
+license = "MIT"
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.3,<9",
+  "ruff>=0.12,<1",
+  "mypy>=1.15,<2",
+  "pre-commit>=4,<5",
+  "pip-audit>=2.9,<3",
+  "numpy>=1.26,<3",
+  "pymupdf>=1.24,<2",
+  "opencv-python-headless>=4.10,<5",
+  "scikit-learn>=1.5,<2",
+  "fastapi>=0.115,<1",
+  "httpx>=0.27,<1",
+  "plotly>=5.24,<7",
+  "PyYAML>=6,<7",
+]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+exclude = [
+  "**/*.ipynb",
+  "projects/pplx-embed-project/streamlit_app/app.py",
+  "projects/pplx-embed-project/scripts/export_projector.py",
+]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+ignore = ["E501"]
+
+[tool.pytest.ini_options]
+addopts = "-ra"
+testpaths = ["projects"]
+python_files = ["test_*.py"]
+
+[tool.mypy]
+python_version = "3.11"
+warn_unused_configs = true
+ignore_missing_imports = true
