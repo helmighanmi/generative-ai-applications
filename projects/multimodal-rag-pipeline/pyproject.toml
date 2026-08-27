@@ -29,7 +29,7 @@ dependencies = [
 
 [project.optional-dependencies]
 ai = [
-  "openai>=1.40,<3",
+  "openai>=1.40,<4",
   "sentence-transformers>=3,<7",
   "transformers>=4.45,<5",
 ]
