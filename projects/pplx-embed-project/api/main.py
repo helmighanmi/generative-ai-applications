@@ -19,7 +19,7 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
-from .embedder import EmbeddingModel, MODEL_NAME
+from .embedder import MODEL_NAME, EmbeddingModel, FakeEmbeddingModel
 
 logger = logging.getLogger(__name__)
 
@@ -68,11 +68,20 @@ def _cors_origins() -> list[str]:
     return [origin.strip() for origin in raw.split(",") if origin.strip()]
 
 
-def create_app(model_factory: Callable[[], Embedder] = EmbeddingModel) -> FastAPI:
+def _default_model_factory() -> Embedder:
+    if os.getenv("EMBEDDER_BACKEND", "").lower() == "fake":
+        logger.info("Using deterministic fake embedder")
+        return FakeEmbeddingModel()
+    return EmbeddingModel()
+
+
+def create_app(model_factory: Callable[[], Embedder] | None = None) -> FastAPI:
+    factory = model_factory or _default_model_factory
+
     @asynccontextmanager
     async def lifespan(app: FastAPI):
         logger.info("Loading embedding model")
-        app.state.embedder = model_factory()
+        app.state.embedder = factory()
         yield
         app.state.embedder = None
 
@@ -99,6 +108,18 @@ def create_app(model_factory: Callable[[], Embedder] = EmbeddingModel) -> FastAP
         return HealthResponse(
             status="ok" if embedder is not None else "loading",
             model_loaded=embedder is not None,
+            model_name=getattr(embedder, "model_name", MODEL_NAME),
+            device="cpu",
+        )
+
+    @application.get("/ready", response_model=HealthResponse)
+    def ready(request: Request) -> HealthResponse:
+        embedder = get_embedder(request)
+        if embedder is None:
+            raise HTTPException(status_code=503, detail="Model is not ready")
+        return HealthResponse(
+            status="ok",
+            model_loaded=True,
             model_name=getattr(embedder, "model_name", MODEL_NAME),
             device="cpu",
         )

@@ -34,16 +34,15 @@ from __future__ import annotations
 import argparse
 import json
 import os
-import sys
 import warnings
 from pathlib import Path
-from typing import Literal, Optional
+from typing import Literal
 
 import numpy as np
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
-from sklearn.decomposition import PCA
 from sklearn.cluster import KMeans
+from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
 from sklearn.preprocessing import normalize
 
@@ -56,9 +55,18 @@ Method = Literal["pca", "umap", "tsne"]
 # ─── Palette ──────────────────────────────────────────────────────────────────
 
 PALETTE = [
-    "#7c6af7", "#46e8b0", "#f7c46a", "#f87171",
-    "#60a5fa", "#fb923c", "#a78bfa", "#34d399",
-    "#fbbf24", "#f472b6", "#38bdf8", "#4ade80",
+    "#7c6af7",
+    "#46e8b0",
+    "#f7c46a",
+    "#f87171",
+    "#60a5fa",
+    "#fb923c",
+    "#a78bfa",
+    "#34d399",
+    "#fbbf24",
+    "#f472b6",
+    "#38bdf8",
+    "#4ade80",
 ]
 
 DARK_THEME = dict(
@@ -66,12 +74,16 @@ DARK_THEME = dict(
     plot_bgcolor="#0d0f14",
     font_color="#e8eaf0",
     xaxis=dict(
-        showgrid=True, gridcolor="#1e2130", zeroline=False,
+        showgrid=True,
+        gridcolor="#1e2130",
+        zeroline=False,
         tickfont=dict(size=10, color="#6b7280"),
         title_font=dict(color="#6b7280"),
     ),
     yaxis=dict(
-        showgrid=True, gridcolor="#1e2130", zeroline=False,
+        showgrid=True,
+        gridcolor="#1e2130",
+        zeroline=False,
         tickfont=dict(size=10, color="#6b7280"),
         title_font=dict(color="#6b7280"),
     ),
@@ -79,6 +91,7 @@ DARK_THEME = dict(
 
 
 # ─── Core class ───────────────────────────────────────────────────────────────
+
 
 class EmbeddingProjector:
     """
@@ -94,8 +107,8 @@ class EmbeddingProjector:
     def __init__(
         self,
         embeddings: np.ndarray | list,
-        labels: Optional[list[str]] = None,
-        categories: Optional[list] = None,
+        labels: list[str] | None = None,
+        categories: list | None = None,
     ):
         self.embeddings = normalize(np.array(embeddings, dtype=np.float32))
         n = len(self.embeddings)
@@ -188,10 +201,7 @@ class EmbeddingProjector:
             group_labels = [f"Cluster {c}" for c in cluster_ids]
 
         # Short labels for display
-        hover_labels = [
-            f"{lbl[:120]}…" if len(lbl) > 120 else lbl
-            for lbl in self.labels
-        ]
+        hover_labels = [f"{lbl[:120]}…" if len(lbl) > 120 else lbl for lbl in self.labels]
 
         # Build traces per group for legend
         group_map: dict[str, list[int]] = {}
@@ -201,34 +211,37 @@ class EmbeddingProjector:
         fig = go.Figure()
 
         for group, indices in sorted(group_map.items()):
-            fig.add_trace(go.Scatter(
-                x=x[indices],
-                y=y[indices],
-                mode="markers+text",
-                name=group,
-                text=["" for _ in indices],   # no inline text to avoid clutter
-                customdata=[hover_labels[i] for i in indices],
-                hovertemplate="<b>%{customdata}</b><extra>%{fullData.name}</extra>",
-                marker=dict(
-                    color=colors[indices[0]],
-                    size=10,
-                    opacity=0.85,
-                    line=dict(color="rgba(255,255,255,0.15)", width=1),
-                    symbol="circle",
-                ),
-            ))
+            fig.add_trace(
+                go.Scatter(
+                    x=x[indices],
+                    y=y[indices],
+                    mode="markers+text",
+                    name=group,
+                    text=["" for _ in indices],  # no inline text to avoid clutter
+                    customdata=[hover_labels[i] for i in indices],
+                    hovertemplate="<b>%{customdata}</b><extra>%{fullData.name}</extra>",
+                    marker=dict(
+                        color=colors[indices[0]],
+                        size=10,
+                        opacity=0.85,
+                        line=dict(color="rgba(255,255,255,0.15)", width=1),
+                        symbol="circle",
+                    ),
+                )
+            )
 
         method_label = method.upper()
         subtitle = ""
         if method == "pca" and hasattr(self, "_pca_var"):
-            pct = " + ".join(f"{v*100:.1f}%" for v in self._pca_var[:2])
+            pct = " + ".join(f"{v * 100:.1f}%" for v in self._pca_var[:2])
             subtitle = f" — explained variance: {pct}"
 
         fig.update_layout(
             title=dict(
                 text=f"<b>{title}</b>   <span style='font-size:13px;color:#6b7280'>{method_label}{subtitle}</span>",
                 font=dict(size=18, color="#e8eaf0"),
-                x=0.02, xanchor="left",
+                x=0.02,
+                xanchor="left",
             ),
             legend=dict(
                 bgcolor="rgba(22,25,32,0.8)",
@@ -274,27 +287,37 @@ class EmbeddingProjector:
 
         fig = go.Figure()
         for group, indices in sorted(group_map.items()):
-            fig.add_trace(go.Scatter3d(
-                x=x[indices], y=y[indices], z=z[indices],
-                mode="markers",
-                name=group,
-                customdata=[hover_labels[i] for i in indices],
-                hovertemplate="<b>%{customdata}</b><extra>%{fullData.name}</extra>",
-                marker=dict(
-                    color=colors[indices[0]],
-                    size=6,
-                    opacity=0.85,
-                    line=dict(color="rgba(255,255,255,0.1)", width=0.5),
-                ),
-            ))
+            fig.add_trace(
+                go.Scatter3d(
+                    x=x[indices],
+                    y=y[indices],
+                    z=z[indices],
+                    mode="markers",
+                    name=group,
+                    customdata=[hover_labels[i] for i in indices],
+                    hovertemplate="<b>%{customdata}</b><extra>%{fullData.name}</extra>",
+                    marker=dict(
+                        color=colors[indices[0]],
+                        size=6,
+                        opacity=0.85,
+                        line=dict(color="rgba(255,255,255,0.1)", width=0.5),
+                    ),
+                )
+            )
 
         fig.update_layout(
             title=dict(text=f"<b>{title}</b>", font=dict(size=18, color="#e8eaf0"), x=0.02),
             scene=dict(
                 bgcolor="#0d0f14",
-                xaxis=dict(backgroundcolor="#0d0f14", gridcolor="#1e2130", showgrid=True, zeroline=False),
-                yaxis=dict(backgroundcolor="#0d0f14", gridcolor="#1e2130", showgrid=True, zeroline=False),
-                zaxis=dict(backgroundcolor="#0d0f14", gridcolor="#1e2130", showgrid=True, zeroline=False),
+                xaxis=dict(
+                    backgroundcolor="#0d0f14", gridcolor="#1e2130", showgrid=True, zeroline=False
+                ),
+                yaxis=dict(
+                    backgroundcolor="#0d0f14", gridcolor="#1e2130", showgrid=True, zeroline=False
+                ),
+                zaxis=dict(
+                    backgroundcolor="#0d0f14", gridcolor="#1e2130", showgrid=True, zeroline=False
+                ),
             ),
             paper_bgcolor="#0d0f14",
             font_color="#e8eaf0",
@@ -314,34 +337,52 @@ class EmbeddingProjector:
         cumvar = np.cumsum(var)
 
         fig = make_subplots(specs=[[{"secondary_y": True}]])
-        fig.add_trace(go.Bar(
-            x=list(range(1, k + 1)), y=var * 100,
-            name="Variance per PC",
-            marker_color="#7c6af7",
-            marker_line_width=0,
-            opacity=0.8,
-        ))
-        fig.add_trace(go.Scatter(
-            x=list(range(1, k + 1)), y=cumvar * 100,
-            name="Cumulative variance",
-            line=dict(color="#46e8b0", width=2),
-            mode="lines+markers",
-            marker=dict(size=5),
-        ), secondary_y=True)
+        fig.add_trace(
+            go.Bar(
+                x=list(range(1, k + 1)),
+                y=var * 100,
+                name="Variance per PC",
+                marker_color="#7c6af7",
+                marker_line_width=0,
+                opacity=0.8,
+            )
+        )
+        fig.add_trace(
+            go.Scatter(
+                x=list(range(1, k + 1)),
+                y=cumvar * 100,
+                name="Cumulative variance",
+                line=dict(color="#46e8b0", width=2),
+                mode="lines+markers",
+                marker=dict(size=5),
+            ),
+            secondary_y=True,
+        )
 
         fig.update_layout(
-            title=dict(text="<b>PCA — Explained Variance (Scree Plot)</b>",
-                       font=dict(size=16, color="#e8eaf0"), x=0.02),
+            title=dict(
+                text="<b>PCA — Explained Variance (Scree Plot)</b>",
+                font=dict(size=16, color="#e8eaf0"),
+                x=0.02,
+            ),
             xaxis_title="Principal Component",
             height=380,
             margin=dict(l=40, r=40, t=60, b=40),
             legend=dict(bgcolor="rgba(22,25,32,0.8)", bordercolor="#252837", borderwidth=1),
             **DARK_THEME,
         )
-        fig.update_yaxes(title_text="Variance (%)", secondary_y=False,
-                         tickfont=dict(color="#6b7280"), gridcolor="#1e2130")
-        fig.update_yaxes(title_text="Cumulative (%)", secondary_y=True,
-                         tickfont=dict(color="#6b7280"), range=[0, 105])
+        fig.update_yaxes(
+            title_text="Variance (%)",
+            secondary_y=False,
+            tickfont=dict(color="#6b7280"),
+            gridcolor="#1e2130",
+        )
+        fig.update_yaxes(
+            title_text="Cumulative (%)",
+            secondary_y=True,
+            tickfont=dict(color="#6b7280"),
+            range=[0, 105],
+        )
         return fig
 
     # ── HTML export ───────────────────────────────────────────────────────────
@@ -359,11 +400,17 @@ class EmbeddingProjector:
         All Plotly JS is bundled inline.
         """
         fig2d = self.plot(method=method, n_clusters=n_clusters, title=title)
-        fig3d = self.plot3d(method=method, n_clusters=n_clusters, title=f"{title} — 3D") if include_3d else None
+        fig3d = (
+            self.plot3d(method=method, n_clusters=n_clusters, title=f"{title} — 3D")
+            if include_3d
+            else None
+        )
         fig_var = self.plot_variance()
 
         html_2d = fig2d.to_html(full_html=False, include_plotlyjs="cdn", div_id="plot2d")
-        html_3d = fig3d.to_html(full_html=False, include_plotlyjs=False, div_id="plot3d") if fig3d else ""
+        html_3d = (
+            fig3d.to_html(full_html=False, include_plotlyjs=False, div_id="plot3d") if fig3d else ""
+        )
         html_var = fig_var.to_html(full_html=False, include_plotlyjs=False, div_id="plotvar")
 
         n = len(self.embeddings)
@@ -454,7 +501,7 @@ class EmbeddingProjector:
 
 <nav>
   <button class="active" onclick="showTab('tab2d', this)">Vue 2D</button>
-  {f"<button onclick=" + chr(39) + "showTab(" + chr(39) + "tab3d" + chr(39) + ", this)" + chr(39) + ">Vue 3D</button>" if include_3d else ""}
+  {"<button onclick=" + chr(39) + "showTab(" + chr(39) + "tab3d" + chr(39) + ", this)" + chr(39) + ">Vue 3D</button>" if include_3d else ""}
   <button onclick="showTab('tabvar', this)">Variance PCA</button>
 </nav>
 
@@ -462,7 +509,7 @@ class EmbeddingProjector:
   <div class="plot-container">{html_2d}</div>
 </div>
 
-  {f"<div id='tab3d' class='tab-content'><div class='plot-container'>" + html_3d + "</div></div>" if include_3d else ""}
+  {"<div id='tab3d' class='tab-content'><div class='plot-container'>" + html_3d + "</div></div>" if include_3d else ""}
 
 <div id="tabvar" class="tab-content">
   <div class="plot-container">{html_var}</div>
@@ -483,6 +530,7 @@ function showTab(id, btn) {{
 """
         Path(output_path).write_text(html, encoding="utf-8")
         return output_path
+
 
 # ─── Demo data ────────────────────────────────────────────────────────────────
 
@@ -509,34 +557,49 @@ DEMO_TEXTS = [
     "La Loire est le fleuve le plus long de France avec 1 013 kilomètres.",
 ]
 
-DEMO_CATEGORIES = (
-    ["Sciences"] * 4 + ["Histoire"] * 4 +
-    ["Technologie"] * 4 + ["Géographie"] * 4
-)
+DEMO_CATEGORIES = ["Sciences"] * 4 + ["Histoire"] * 4 + ["Technologie"] * 4 + ["Géographie"] * 4
 
 
 # ─── CLI ──────────────────────────────────────────────────────────────────────
+
 
 def main():
     parser = argparse.ArgumentParser(
         description="Export an interactive embedding projector to standalone HTML.",
         formatter_class=argparse.RawTextHelpFormatter,
     )
-    parser.add_argument("--input", "-i", type=str, default=None,
-                        help="Path to embeddings.json (from /embed API endpoint)")
-    parser.add_argument("--output", "-o", type=str, default="projector.html",
-                        help="Output HTML path (default: projector.html)")
-    parser.add_argument("--method", "-m", type=str, default="umap",
-                        choices=["pca", "umap", "tsne"],
-                        help="Dimensionality reduction method (default: umap)")
-    parser.add_argument("--clusters", "-k", type=int, default=6,
-                        help="Number of K-Means clusters (default: 6)")
-    parser.add_argument("--no-3d", action="store_true",
-                        help="Skip 3D plot (faster export)")
-    parser.add_argument("--title", type=str, default="Embedding Projector",
-                        help="Title shown in the HTML page")
-    parser.add_argument("--demo", action="store_true",
-                        help="Run on built-in French demo data (no --input needed)")
+    parser.add_argument(
+        "--input",
+        "-i",
+        type=str,
+        default=None,
+        help="Path to embeddings.json (from /embed API endpoint)",
+    )
+    parser.add_argument(
+        "--output",
+        "-o",
+        type=str,
+        default="projector.html",
+        help="Output HTML path (default: projector.html)",
+    )
+    parser.add_argument(
+        "--method",
+        "-m",
+        type=str,
+        default="umap",
+        choices=["pca", "umap", "tsne"],
+        help="Dimensionality reduction method (default: umap)",
+    )
+    parser.add_argument(
+        "--clusters", "-k", type=int, default=6, help="Number of K-Means clusters (default: 6)"
+    )
+    parser.add_argument("--no-3d", action="store_true", help="Skip 3D plot (faster export)")
+    parser.add_argument(
+        "--title", type=str, default="Embedding Projector", help="Title shown in the HTML page"
+    )
+    parser.add_argument(
+        "--demo", action="store_true", help="Run on built-in French demo data (no --input needed)"
+    )
     args = parser.parse_args()
 
     # ── Load data ──────────────────────────────────────────────────────────────
@@ -545,6 +608,7 @@ def main():
         # Embed via local API if available, else use random vectors
         try:
             import requests
+
             api_url = os.getenv("API_URL", "http://localhost:8000")
             r = requests.post(f"{api_url}/embed", json={"texts": DEMO_TEXTS}, timeout=60)
             r.raise_for_status()
@@ -566,10 +630,12 @@ def main():
         categories = data.get("categories", None)
 
     # ── Project & export ───────────────────────────────────────────────────────
-    print(f"⚙️  Reducing {len(embeddings)} vectors ({len(embeddings[0])}D → 2D/3D) with {args.method.upper()}...")
+    print(
+        f"⚙️  Reducing {len(embeddings)} vectors ({len(embeddings[0])}D → 2D/3D) with {args.method.upper()}..."
+    )
     proj = EmbeddingProjector(embeddings, labels=texts, categories=categories)
 
-    print(f"🎨 Building interactive plots...")
+    print("🎨 Building interactive plots...")
     out = proj.export_html(
         output_path=args.output,
         method=args.method,  # type: ignore

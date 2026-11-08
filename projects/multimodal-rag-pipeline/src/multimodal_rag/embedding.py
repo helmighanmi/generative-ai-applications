@@ -7,8 +7,8 @@
 from __future__ import annotations
 
 import base64
+import hashlib
 from io import BytesIO
-from typing import Optional
 
 import numpy as np
 
@@ -29,8 +29,8 @@ except Exception:  # pragma: no cover
 
 try:
     # CLIP for image embeddings
-    from transformers import CLIPModel, CLIPProcessor  # type: ignore
     from PIL import Image  # type: ignore
+    from transformers import CLIPModel, CLIPProcessor  # type: ignore
 except Exception:  # pragma: no cover
     CLIPModel = None  # type: ignore
     CLIPProcessor = None  # type: ignore
@@ -58,7 +58,7 @@ class EmbeddingService:
         self.provider: str = cfg.get_embedding_provider()
         self.text_model_id: str = cfg.get_embedding_model_id()
         self.dim: int = cfg.get_embedding_dim()
-        self.image_model_id: Optional[str] = cfg.get_image_encoder()
+        self.image_model_id: str | None = cfg.get_image_encoder()
 
         # Lazy-initialized clients/models (only created if/when needed)
         self._openai_client = None
@@ -69,7 +69,7 @@ class EmbeddingService:
     # ---------------------------
     # Public API
     # ---------------------------
-    def embed(self, *, text: Optional[str] = None, image_b64: Optional[str] = None) -> np.ndarray:
+    def embed(self, *, text: str | None = None, image_b64: str | None = None) -> np.ndarray:
         """
         Compute an embedding for either text or a base64-encoded image.
 
@@ -117,7 +117,7 @@ class EmbeddingService:
         provider = self.provider.lower()
 
         if provider == "stub":
-            return _deterministic_stub_vector("img::" + image_b64[:64], self.dim)
+            return _deterministic_stub_vector("img::" + image_b64, self.dim)
 
         if provider == "huggingface":
             clip_model, clip_processor = self._ensure_clip()
@@ -137,7 +137,7 @@ class EmbeddingService:
 
         if provider == "bedrock":
             # Placeholder: integrate a Bedrock vision model that outputs embeddings.
-            return _deterministic_stub_vector("bedrock_img::" + image_b64[:64], self.dim)
+            return _deterministic_stub_vector("bedrock_img::" + image_b64, self.dim)
 
         raise NotImplementedError(f"Image embeddings not supported for provider: {self.provider}")
 
@@ -163,8 +163,7 @@ class EmbeddingService:
     def _ensure_clip(self):
         if any(m is None for m in (CLIPModel, CLIPProcessor, Image)):
             raise ImportError(
-                "transformers and/or pillow are not installed. "
-                "`pip install transformers Pillow`"
+                "transformers and/or pillow are not installed. `pip install transformers Pillow`"
             )
         if self.image_model_id is None:
             raise ValueError(
@@ -181,11 +180,14 @@ class EmbeddingService:
 # Module-level helpers
 # ---------------------------
 
+
 def _deterministic_stub_vector(key: str, dim: int) -> np.ndarray:
     """
     Produce a deterministic pseudo-random vector (useful for tests/demo without API calls).
     """
-    rng = np.random.default_rng(abs(hash(key)) % (2**32))
+    digest = hashlib.sha256(key.encode("utf-8")).digest()
+    seed = int.from_bytes(digest[:8], "big")
+    rng = np.random.default_rng(seed)
     return rng.random(dim, dtype=np.float32)
 
 

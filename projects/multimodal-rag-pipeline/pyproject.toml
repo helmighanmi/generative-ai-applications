@@ -21,19 +21,20 @@ dependencies = [
   "requests>=2.32,<3",
   "pymupdf>=1.24,<2",
   "tabula-py>=2.9,<3",
-  "Pillow>=10,<12",
+  "Pillow>=13,<14",
   "faiss-cpu>=1.8,<2",
-  "langchain-text-splitters>=0.3,<1",
+  "langchain-text-splitters>=1.1.2,<2",
   "tqdm>=4.66,<5",
 ]
 
 [project.optional-dependencies]
 ai = [
   "openai>=1.40,<3",
-  "sentence-transformers>=3,<7",
-  "transformers>=4.45,<5",
+  "sentence-transformers>=6.2,<7",
+  "transformers>=5.22,<6",
+  "huggingface-hub>=1.31,<3",
 ]
-dev = ["multimodal-rag-pipeline[ai]", "pytest>=8.3,<9", "ruff>=0.12,<1"]
+dev = ["pytest>=8.3,<9", "ruff==0.17.4"]
 
 [project.scripts]
 multimodal-rag = "multimodal_rag.cli:main"
@@ -43,7 +44,4 @@ where = ["src"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-
-[tool.ruff]
-target-version = "py311"
-line-length = 100
+pythonpath = ["src"]

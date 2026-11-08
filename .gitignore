@@ -225,4 +225,9 @@ models/
 *.pth
 
 # Local tool artifacts
-.secrets.baseline
+.venv*/
+.DS_Store
+.pids
+.streamlit/
+projector*.html
+embeddings.json

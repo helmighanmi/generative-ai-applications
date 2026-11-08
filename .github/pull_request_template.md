@@ -17,9 +17,9 @@ Why this approach? What alternatives were considered?
 ## Validation
 
 - [ ] Unit/integration tests updated
-- [ ] `make lint` passes
-- [ ] `make format-check` passes
-- [ ] `make compile` passes
+- [ ] `make check` passes
+- [ ] `make test` passes
+- [ ] Dependency audit passes, or an exception follows `docs/security-audit-policy.md`
 - [ ] No secrets, model weights, or private data added
 - [ ] Documentation/ADR updated when architecture or operations changed
 

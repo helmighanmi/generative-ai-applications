@@ -8,11 +8,12 @@
 
 from __future__ import annotations
 
+import hashlib
 import logging
 import os
 import sys
+from collections.abc import Sequence
 from pathlib import Path
-from typing import Sequence
 
 import numpy as np
 
@@ -87,6 +88,29 @@ class EmbeddingModel:
             dtype=np.float32,
         )
         first, second = vectors
+        denominator = float(np.linalg.norm(first) * np.linalg.norm(second))
+        if denominator == 0.0:
+            return 0.0
+        return float(np.dot(first, second) / denominator)
+
+
+class FakeEmbeddingModel:
+    """Deterministic, dependency-free embedder used for CI container smoke tests."""
+
+    model_name = "fake/pplx-embed-v1-0.6b"
+    dimensions = 64
+
+    def _vector(self, text: str) -> np.ndarray:
+        seed = int.from_bytes(hashlib.sha256(text.encode("utf-8")).digest()[:8], "big")
+        return np.random.default_rng(seed).random(self.dimensions, dtype=np.float32)
+
+    def encode(self, texts: Sequence[str], batch_size: int = 16) -> list[list[float]]:
+        del batch_size
+        return [self._vector(text).tolist() for text in texts]
+
+    def cosine_similarity(self, text_a: str, text_b: str) -> float:
+        first = self._vector(text_a)
+        second = self._vector(text_b)
         denominator = float(np.linalg.norm(first) * np.linalg.norm(second))
         if denominator == 0.0:
             return 0.0

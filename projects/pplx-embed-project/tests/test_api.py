@@ -8,9 +8,9 @@ from __future__ import annotations
 
 import numpy as np
 import pytest
-from fastapi.testclient import TestClient
-
+from api.embedder import FakeEmbeddingModel
 from api.main import create_app
+from fastapi.testclient import TestClient
 
 
 class FakeEmbedder:
@@ -40,6 +40,23 @@ def test_health_reports_loaded_model(client: TestClient) -> None:
         "model_name": "fake/pplx-embed-v1-0.6b",
         "device": "cpu",
     }
+
+
+def test_ready_reports_loaded_model(client: TestClient) -> None:
+    response = client.get("/ready")
+    assert response.status_code == 200
+    assert response.json()["model_loaded"] is True
+
+
+def test_readiness_is_unavailable_without_a_model() -> None:
+    with TestClient(create_app(model_factory=lambda: None)) as test_client:
+        assert test_client.get("/ready").status_code == 503
+
+
+def test_fake_embedder_is_deterministic() -> None:
+    model = FakeEmbeddingModel()
+    assert model.encode(["same text"]) == model.encode(["same text"])
+    assert model.encode(["one"]) != model.encode(["two"])
 
 
 def test_embed_returns_dimensions_and_vectors(client: TestClient) -> None:

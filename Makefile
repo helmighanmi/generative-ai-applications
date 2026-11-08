@@ -6,7 +6,7 @@
 
 PYTHON ?= python
 
-.PHONY: help install lint format format-check compile test security clean
+.PHONY: help install lint format format-check compile check test security clean
 
 help:
 	@echo "Repository commands:"
@@ -15,6 +15,7 @@ help:
 	@echo "  make format        Apply Ruff formatting"
 	@echo "  make format-check  Verify Ruff formatting"
 	@echo "  make compile       Compile all Python source for syntax errors"
+	@echo "  make check         Run every static quality gate used by CI"
 	@echo "  make test          Run lightweight project tests"
 	@echo "  make security      Audit root environment dependencies"
 	@echo "  make clean         Remove Python cache/build artifacts"
@@ -34,11 +35,14 @@ format-check:
 compile:
 	$(PYTHON) -m compileall -q projects scripts
 
+check: lint format-check compile
+	$(PYTHON) scripts/check_docs_links.py
+
 test:
 	$(PYTHON) scripts/run_tests.py
 
 security:
-	pip-audit
+	pip-audit --strict
 
 clean:
 	find . -type d \( -name __pycache__ -o -name .pytest_cache -o -name .ruff_cache -o -name .mypy_cache \) -prune -exec rm -rf {} +

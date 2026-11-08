@@ -6,8 +6,6 @@
 
 from __future__ import annotations
 
-from typing import Dict, List
-
 from .config import Config
 
 # Optional provider libraries
@@ -22,11 +20,13 @@ except Exception:  # pragma: no cover
     pipeline = None  # type: ignore
 
 
-def _build_prompt(question: str, contexts: List[Dict], max_ctx: int = 5, max_chars: int = 500) -> str:
+def _build_prompt(
+    question: str, contexts: list[dict], max_ctx: int = 5, max_chars: int = 500
+) -> str:
     """
     Construct a grounded prompt from retrieved contexts.
     """
-    parts: List[str] = []
+    parts: list[str] = []
     for c in contexts[:max_ctx]:
         txt = c.get("text") or ""
         if not txt:
@@ -86,7 +86,7 @@ class GeneratorService:
     # ---------------------------
     # Public API
     # ---------------------------
-    def generate(self, question: str, contexts: List[Dict]) -> str:
+    def generate(self, question: str, contexts: list[dict]) -> str:
         """
         Generate an answer grounded in retrieved contexts.
         """
@@ -107,7 +107,7 @@ class GeneratorService:
                 temperature=self.temperature,
                 max_tokens=self.max_tokens,
             )
-            return resp.choices[0].message["content"]  # type: ignore[index]
+            return resp.choices[0].message.content
 
         if provider == "huggingface":
             # text-generation pipeline returns a list of dicts with 'generated_text'

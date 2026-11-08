@@ -12,7 +12,7 @@ import argparse
 import json
 from pathlib import Path
 
-import fitz
+import pymupdf
 
 from .classifier import HybridClassifier, ImprovedPDFClassifier
 
@@ -29,7 +29,7 @@ def main() -> int:
     if not args.pdf.is_file():
         raise SystemExit(f"PDF not found: {args.pdf}")
 
-    with fitz.open(args.pdf) as document:
+    with pymupdf.open(args.pdf) as document:
         if len(document) == 0:
             raise SystemExit("PDF contains no pages")
 

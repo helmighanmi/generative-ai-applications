@@ -17,27 +17,23 @@ authors = [{name = "GHANMI Helmi"}]
 license = "MIT"
 dependencies = [
   "pypdf>=5,<7",
-  "chromadb>=1,<2",
-  "sentence-transformers>=5.2,<7",
-  "huggingface-hub>=0.30,<2",
+  "faiss-cpu>=1.8,<2",
+  "sentence-transformers>=6.2,<7",
+  "huggingface-hub>=1.31,<2",
   "langchain-community>=0.3,<2",
   "langchain-text-splitters>=0.3,<2",
   "langchain-huggingface>=0.2,<2",
-  "langchain-chroma>=0.2,<2",
 ]
 
 [project.scripts]
 rag-qa = "rag_qa_bot.qa_bot:main"
 
 [project.optional-dependencies]
-dev = ["pytest>=8.3,<9", "ruff>=0.12,<1"]
+dev = ["pytest>=8.3,<9", "ruff==0.17.4"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-
-[tool.ruff]
-target-version = "py311"
-line-length = 100
+pythonpath = ["src"]

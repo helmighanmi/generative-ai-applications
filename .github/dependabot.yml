@@ -10,15 +10,48 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    groups:
+      actions:
+        patterns: ["*"]
   - package-ecosystem: "pip"
     directory: "/"
     schedule:
       interval: "weekly"
+    groups:
+      root-tooling:
+        patterns: ["*"]
   - package-ecosystem: "pip"
-    directory: "/projects/pplx-embed-project"
+    directory: "/projects/document-parsing"
     schedule:
       interval: "weekly"
+    groups:
+      document-parsing:
+        patterns: ["*"]
+  - package-ecosystem: "pip"
+    directory: "/projects/langchain"
+    schedule:
+      interval: "weekly"
+    groups:
+      langchain-foundations:
+        patterns: ["*"]
   - package-ecosystem: "pip"
     directory: "/projects/multimodal-rag-pipeline"
     schedule:
       interval: "weekly"
+    groups:
+      multimodal-rag:
+        patterns: ["*"]
+  - package-ecosystem: "pip"
+    directory: "/projects/pplx-embed-project"
+    schedule:
+      interval: "weekly"
+    groups:
+      pplx-embed:
+        patterns: ["*"]
+  - package-ecosystem: "pip"
+    directory: "/projects/rag-qa-bot-langchain"
+    schedule:
+      interval: "weekly"
+    groups:
+      rag-qa-bot:
+        patterns: ["*"]

@@ -5,7 +5,7 @@
 # Research Profile: https://www.researchgate.net/profile/Ghanmi-Helmi
 
 import json
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 import pymupdf  # or: import fitz
 
@@ -13,12 +13,12 @@ import pymupdf  # or: import fitz
 def export_pdf_layout_to_json(
     doc_path: str,
     out_json: str = "layout.json",
-    out_pdf_overlay: Optional[str] = None,  # e.g. "debug_overlay.pdf" or None
+    out_pdf_overlay: str | None = None,  # e.g. "debug_overlay.pdf" or None
     draw_text_spans: bool = False,
     draw_images: bool = False,
     min_img_px: int = 60,  # filter tiny artifact images by pixel size
     sort: bool = True,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     Export PDF layout to JSON for ML/layout pipelines.
 
@@ -67,7 +67,7 @@ def export_pdf_layout_to_json(
     """
     doc = pymupdf.open(doc_path)
 
-    out: Dict[str, Any] = {
+    out: dict[str, Any] = {
         "doc_path": doc_path,
         "page_count": doc.page_count,
         "pages": [],
@@ -75,7 +75,7 @@ def export_pdf_layout_to_json(
 
     for page_index, page in enumerate(doc):
         page_rect = page.rect
-        page_info: Dict[str, Any] = {
+        page_info: dict[str, Any] = {
             "page_index": page_index,
             "page_number": page_index + 1,
             "width": float(page_rect.width),
@@ -102,8 +102,10 @@ def export_pdf_layout_to_json(
                         continue
 
                     bbox = span.get("bbox")
-                    span_item: Dict[str, Any] = {
-                        "block_no": int(block_no) if isinstance(block_no, (int, float)) else block_no,
+                    span_item: dict[str, Any] = {
+                        "block_no": int(block_no)
+                        if isinstance(block_no, (int, float))
+                        else block_no,
                         "line_no": line_no,
                         "span_no": span_no,
                         "text": text,
@@ -112,7 +114,9 @@ def export_pdf_layout_to_json(
                         "size": float(span.get("size")) if span.get("size") is not None else None,
                         "flags": span.get("flags"),
                         "color": span.get("color"),
-                        "origin": [float(x) for x in span.get("origin")] if "origin" in span else None,
+                        "origin": [float(x) for x in span.get("origin")]
+                        if "origin" in span
+                        else None,
                     }
                     page_info["spans"].append(span_item)
 
@@ -129,7 +133,7 @@ def export_pdf_layout_to_json(
                 continue
 
             rects = page.get_image_rects(xref)
-            img_item: Dict[str, Any] = {
+            img_item: dict[str, Any] = {
                 "xref": int(xref),
                 "name": name,
                 "pixel_size": [int(w), int(h)],
