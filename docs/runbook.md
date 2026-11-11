@@ -39,7 +39,9 @@ python -m pytest -q
 ```
 
 Each project's `pyproject.toml` sets `pythonpath`, so tests do not depend on the caller's
-`PYTHONPATH`. Root `pip install -e '.[dev]'` installs repository tooling only.
+`PYTHONPATH`. Root `pip install -e '.[dev]'` installs repository tooling only. The
+`multimodal-rag-pipeline` provider stack is an extra: use `pip install -e '.[dev,ai]'` for a full
+local environment. CI installs `.[ai]` explicitly in the audit and integration jobs.
 
 ## CI fails at integration-smoke
 

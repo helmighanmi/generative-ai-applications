@@ -56,9 +56,11 @@ python main.py query "What is self-attention?"
 python main.py ask "Summarize the main idea"
 ```
 
-To use a real provider:
+To use a real provider, install the provider stack (it is an extra, so a test-only
+`.[dev]` install does not include it) and export the provider settings:
 
 ```bash
+pip install -e '.[ai]'
 export RAG_EMBEDDING_PROVIDER=huggingface
 export RAG_LLM_PROVIDER=openai
 export OPENAI_API_KEY=...

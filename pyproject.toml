@@ -29,7 +29,7 @@ dev = [
   "pre-commit>=4,<5",
   "pip-audit==2.10.1",
   "numpy>=1.26,<3",
-  "pymupdf>=1.24,<2",
+  "pymupdf>=1.24.3,<2",
   "opencv-python-headless>=4.10,<5",
   "scikit-learn>=1.5,<2",
   "fastapi>=0.115,<1",
