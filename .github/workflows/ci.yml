@@ -81,7 +81,7 @@ jobs:
 
   integration-smoke:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 25
     defaults:
       run:
         working-directory: projects/multimodal-rag-pipeline
@@ -91,11 +91,13 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
           cache: pip
-      - name: Install pipeline without provider extras
+      - name: Install pipeline with provider extras
         run: |
           python -m pip install --upgrade pip
-          pip install -e '.[dev]'
+          pip install -e '.[ai,dev]'
           pip check
+      - name: Verify the provider stack imports
+        run: python -c "import openai, sentence_transformers, torch, transformers"
       - name: Run cross-process integration tests
         run: python -m pytest -q tests/test_pipeline.py
 

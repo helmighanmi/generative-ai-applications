@@ -97,7 +97,7 @@ class EmbeddingModel:
 class FakeEmbeddingModel:
     """Deterministic, dependency-free embedder used for CI container smoke tests."""
 
-    model_name = "fake/pplx-embed-v1-0.6b"
+    model_name = "fake/deterministic-embedder"
     dimensions = 64
 
     def _vector(self, text: str) -> np.ndarray:

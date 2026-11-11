@@ -19,6 +19,9 @@ Research Profile: https://www.researchgate.net/profile/Ghanmi-Helmi
 - Replaced the vulnerable ChromaDB dependency in `rag-qa-bot-langchain` with a local FAISS retriever.
 - Made offline stub embeddings deterministic across processes.
 - Added readiness handling and end-to-end smoke tests.
+- Audited the multimodal provider stack by installing its `ai` extra, and documented the
+  `.[dev,ai]` install for local provider use.
+- Raised the `pymupdf` floor to `1.24.3`, the first release that ships the `pymupdf` module name.
 
 ## 2.0.0 — Engineering hardening
 
