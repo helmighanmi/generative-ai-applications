@@ -19,7 +19,7 @@ dependencies = [
   "pypdf>=5,<7",
   "faiss-cpu>=1.8,<2",
   "sentence-transformers>=6.2,<7",
-  "huggingface-hub>=1.31,<2",
+  "huggingface-hub>=1.31,<3",
   "langchain-community>=0.3,<2",
   "langchain-text-splitters>=0.3,<2",
   "langchain-huggingface>=0.2,<2",
@@ -29,7 +29,7 @@ dependencies = [
 rag-qa = "rag_qa_bot.qa_bot:main"
 
 [project.optional-dependencies]
-dev = ["pytest>=8.3,<9", "ruff==0.17.4"]
+dev = ["pytest>=8.3,<10", "ruff==0.17.4"]
 
 [tool.setuptools.packages.find]
 where = ["src"]

@@ -29,12 +29,12 @@ dependencies = [
 
 [project.optional-dependencies]
 ai = [
-  "openai>=1.40,<3",
+  "openai>=1.40,<4",
   "sentence-transformers>=6.2,<7",
   "transformers>=5.22,<6",
   "huggingface-hub>=1.31,<3",
 ]
-dev = ["pytest>=8.3,<9", "ruff==0.17.4"]
+dev = ["pytest>=8.3,<10", "ruff==0.17.4"]
 
 [project.scripts]
 multimodal-rag = "multimodal_rag.cli:main"

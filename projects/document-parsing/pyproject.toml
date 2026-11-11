@@ -18,12 +18,12 @@ license = "MIT"
 dependencies = [
   "numpy>=1.26,<3",
   "pymupdf>=1.24.3,<2",
-  "opencv-python-headless>=4.10,<5",
+  "opencv-python-headless>=4.10,<6",
   "scikit-learn>=1.5,<2",
 ]
 
 [project.optional-dependencies]
-dev = ["pytest>=8.3,<9", "ruff==0.17.4"]
+dev = ["pytest>=8.3,<10", "ruff==0.17.4"]
 
 [project.scripts]
 pdf-page-classifier = "pdf_page_classifier.cli:main"
