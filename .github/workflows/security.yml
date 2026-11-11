@@ -37,12 +37,17 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        project:
-          - document-parsing
-          - langchain
-          - multimodal-rag-pipeline
-          - pplx-embed-project
-          - rag-qa-bot-langchain
+        include:
+          - project: document-parsing
+            package: pdf-page-classifier
+          - project: langchain
+            package: langchain-foundations
+          - project: multimodal-rag-pipeline
+            package: multimodal-rag-pipeline
+          - project: pplx-embed-project
+            package: pplx-embed
+          - project: rag-qa-bot-langchain
+            package: rag-qa-bot-langchain
     defaults:
       run:
         working-directory: projects/${{ matrix.project }}
@@ -60,4 +65,5 @@ jobs:
           pip install 'pip-audit==2.10.1'
           pip install .
           pip check
-          pip-audit --strict
+          pip freeze --exclude "${{ matrix.package }}" > "$RUNNER_TEMP/requirements.txt"
+          pip-audit --strict -r "$RUNNER_TEMP/requirements.txt"
