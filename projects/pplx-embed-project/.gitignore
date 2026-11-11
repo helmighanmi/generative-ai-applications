@@ -46,6 +46,7 @@ embeddings.json
 # Secrets
 .env
 .env.*
+!.env.example
 .secrets.baseline
 
 # OS

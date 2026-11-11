@@ -26,7 +26,11 @@ class FaissVectorStore:
     def build(self, embeddings: list[np.ndarray | None], items: list[dict[str, Any]]) -> None:
         if len(embeddings) != len(items):
             raise ValueError("embeddings and metadata items must have identical lengths")
-        paired = [(embedding, item) for embedding, item in zip(embeddings, items, strict=True) if embedding is not None]
+        paired = [
+            (embedding, item)
+            for embedding, item in zip(embeddings, items, strict=True)
+            if embedding is not None
+        ]
         if not paired:
             raise ValueError("cannot build an index without embeddings")
 

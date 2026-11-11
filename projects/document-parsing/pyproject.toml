@@ -17,13 +17,13 @@ authors = [{name = "GHANMI Helmi"}]
 license = "MIT"
 dependencies = [
   "numpy>=1.26,<3",
-  "pymupdf>=1.24,<2",
+  "pymupdf>=1.24.3,<2",
   "opencv-python-headless>=4.10,<5",
   "scikit-learn>=1.5,<2",
 ]
 
 [project.optional-dependencies]
-dev = ["pytest>=8.3,<9", "ruff>=0.12,<1"]
+dev = ["pytest>=8.3,<9", "ruff==0.17.4"]
 
 [project.scripts]
 pdf-page-classifier = "pdf_page_classifier.cli:main"
@@ -33,7 +33,4 @@ where = ["src"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-
-[tool.ruff]
-target-version = "py311"
-line-length = 100
+pythonpath = ["src"]

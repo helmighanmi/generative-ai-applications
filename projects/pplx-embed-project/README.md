@@ -17,7 +17,8 @@ Client / Streamlit
        │
        ▼
 FastAPI
-├── /health
+├── /health   (liveness)
+├── /ready    (readiness; 503 until the model loads)
 ├── /embed
 └── /similarity
        │
@@ -41,6 +42,9 @@ pplx-embed-v1-0.6b (CPU)
 - Internal exception details are logged server-side without being echoed directly to clients.
 - Model auto-download is opt-in locally and enabled for the Docker demo so the named volume can populate on first run.
 - `trust_remote_code=True` is treated as a documented security boundary; production deployments should pin a reviewed `MODEL_REVISION`.
+- `/ready` gates Docker health checks and Compose startup; `/health` remains a liveness endpoint that does not claim readiness.
+- `EMBEDDER_BACKEND=fake` loads a deterministic, dependency-free embedder for CI container smoke tests and UI development without a model download.
+- The dependency metadata keeps Intel macOS on an installable `torch` line; Linux CI resolves and audits the fixed line. Intel macOS is a local-development limitation, not a CI exception.
 
 ## Quick start — Docker
 
@@ -95,6 +99,21 @@ make test
 
 API tests inject a deterministic fake embedder, so pull requests do not require network access or model downloads. Projector tests exercise PCA and HTML export independently of the model-serving path.
 
+To run the API without a model locally or in a container:
+
+```bash
+EMBEDDER_BACKEND=fake uvicorn api.main:app --reload
+curl --fail http://localhost:8000/ready
+curl --fail -X POST http://localhost:8000/embed \
+  -H 'Content-Type: application/json' -d '{"texts":["hello"]}'
+```
+
+## Intel macOS note
+
+PyTorch no longer publishes wheels for Intel macOS. The project metadata keeps that platform on
+`torch>=2.2,<2.3` so local development remains possible; Linux and ARM resolve the fixed
+`torch>=2.15,<3` line. Dependency audits run on Linux and are authoritative.
+
 ## Operational notes
 
-`/health` reports whether the application lifespan successfully loaded a model. If Docker remains unhealthy, inspect the API logs and verify model download access, free disk space, memory, and write permissions on the model volume.
+`/health` is a liveness check. `/ready` reports whether the application lifespan successfully loaded a model and returns HTTP 503 until it has. If Docker remains unhealthy, inspect the API logs and verify model download access, free disk space, memory, and write permissions on the model volume.

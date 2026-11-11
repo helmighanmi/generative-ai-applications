@@ -9,18 +9,16 @@ Streamlit UI for pplx-embed-v1 local embedding service.
 Connects to the FastAPI backend running on localhost:8000.
 """
 
-import streamlit as st
-import requests
 import json
+import os
+import sys
+from pathlib import Path
+
 import numpy as np
-import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
-import time
-import sys
-import os
-from pathlib import Path
-from typing import List
+import requests
+import streamlit as st
 
 # Make scripts importable
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -39,7 +37,8 @@ st.set_page_config(
 
 # ─── CSS ─────────────────────────────────────────────────────────────────────
 
-st.markdown("""
+st.markdown(
+    """
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap');
 
@@ -210,10 +209,13 @@ st.markdown("""
 
   hr { border-color: var(--border) !important; opacity: 0.5; }
 </style>
-""", unsafe_allow_html=True)
+""",
+    unsafe_allow_html=True,
+)
 
 
 # ─── Helpers ──────────────────────────────────────────────────────────────────
+
 
 def api_health():
     try:
@@ -223,7 +225,7 @@ def api_health():
         return None
 
 
-def api_embed(texts: List[str], batch_size: int = 16):
+def api_embed(texts: list[str], batch_size: int = 16):
     r = requests.post(
         f"{API_URL}/embed",
         json={"texts": texts, "batch_size": batch_size},
@@ -243,7 +245,7 @@ def api_similarity(a: str, b: str):
     return r.json()
 
 
-def cosine_matrix(embeddings: List[List[float]]) -> np.ndarray:
+def cosine_matrix(embeddings: list[list[float]]) -> np.ndarray:
     arr = np.array(embeddings, dtype=np.float32)
     norms = np.linalg.norm(arr, axis=1, keepdims=True)
     norms = np.where(norms == 0, 1e-9, norms)
@@ -254,47 +256,71 @@ def cosine_matrix(embeddings: List[List[float]]) -> np.ndarray:
 # ─── Sidebar ──────────────────────────────────────────────────────────────────
 
 with st.sidebar:
-    st.markdown("""
+    st.markdown(
+        """
     <div style="font-family:'Space Mono',monospace; font-size:0.7rem; color:#6b7280; letter-spacing:2px; text-transform:uppercase; margin-bottom:1rem;">
       Configuration
     </div>
-    """, unsafe_allow_html=True)
+    """,
+        unsafe_allow_html=True,
+    )
 
     health = api_health()
     if health and health.get("model_loaded"):
-        st.markdown('<span class="status-dot status-ok"></span> **API connectée**', unsafe_allow_html=True)
+        st.markdown(
+            '<span class="status-dot status-ok"></span> **API connectée**', unsafe_allow_html=True
+        )
     else:
-        st.markdown('<span class="status-dot status-err"></span> **API non disponible**', unsafe_allow_html=True)
+        st.markdown(
+            '<span class="status-dot status-err"></span> **API non disponible**',
+            unsafe_allow_html=True,
+        )
         st.caption(f"URL: `{API_URL}`")
 
     st.markdown("---")
 
-    batch_size = st.slider("Batch size", min_value=1, max_value=64, value=16, step=1,
-                           help="Nombre de textes traités en parallèle (plus grand = plus rapide si RAM suffisante)")
+    batch_size = st.slider(
+        "Batch size",
+        min_value=1,
+        max_value=64,
+        value=16,
+        step=1,
+        help="Nombre de textes traités en parallèle (plus grand = plus rapide si RAM suffisante)",
+    )
 
     st.markdown("---")
 
-    st.markdown("""
+    st.markdown(
+        """
     <div style="font-family:'Space Mono',monospace; font-size:0.65rem; color:#6b7280; text-transform:uppercase; letter-spacing:1.5px; margin-bottom:0.5rem;">
       Modèle
     </div>
-    """, unsafe_allow_html=True)
+    """,
+        unsafe_allow_html=True,
+    )
     st.code("pplx-embed-v1-0.6B", language=None)
-    st.markdown('<span class="badge badge-purple">CPU</span><span class="badge badge-green">Local</span><span class="badge badge-yellow">FR</span>', unsafe_allow_html=True)
+    st.markdown(
+        '<span class="badge badge-purple">CPU</span><span class="badge badge-green">Local</span><span class="badge badge-yellow">FR</span>',
+        unsafe_allow_html=True,
+    )
 
     st.markdown("---")
-    st.markdown("""
+    st.markdown(
+        """
     <div style="font-size:0.75rem; color:#6b7280;">
     📚 Optimisé pour le français<br>
     🔒 100% local, aucune API externe<br>
     📐 1024 dimensions · INT8
     </div>
-    """, unsafe_allow_html=True)
+    """,
+        unsafe_allow_html=True,
+    )
 
 
 # ─── Header ──────────────────────────────────────────────────────────────────
 
-st.markdown("""
+st.markdown(
+    """
 <div class="main-header">
   <h1>🧠 pplx-embed · Studio</h1>
   <p>Calcul d'embeddings locaux avec <strong>pplx-embed-v1-0.6B</strong> de Perplexity AI — aucune donnée ne quitte votre machine.</p>
@@ -303,7 +329,9 @@ st.markdown("""
   <span class="badge badge-green">100% Local</span>
   <span class="badge badge-yellow">Multilingual · FR</span>
 </div>
-""", unsafe_allow_html=True)
+""",
+    unsafe_allow_html=True,
+)
 
 
 # ─── Tabs ────────────────────────────────────────────────────────────────────
@@ -359,22 +387,28 @@ with tab1:
             m3.metric("Temps", f"{result['processing_time_ms']:.0f} ms")
 
             if show_raw:
-                for i, (txt, emb) in enumerate(zip(texts_used, result["embeddings"])):
+                for i, (txt, emb) in enumerate(zip(texts_used, result["embeddings"], strict=True)):
                     short = txt[:60] + "..." if len(txt) > 60 else txt
-                    with st.expander(f"[{i+1}] {short}"):
+                    with st.expander(f"[{i + 1}] {short}"):
                         preview = emb[:24]
                         st.markdown(
                             f'<div class="embed-vector">[{", ".join(f"{v:.4f}" for v in preview)}, ...]</div>',
-                            unsafe_allow_html=True
+                            unsafe_allow_html=True,
                         )
-                        st.caption(f"Vecteur de {len(emb)} dimensions · norme={np.linalg.norm(emb):.4f}")
+                        st.caption(
+                            f"Vecteur de {len(emb)} dimensions · norme={np.linalg.norm(emb):.4f}"
+                        )
 
             # Download button
-            dl_data = json.dumps({
-                "model": result["model"],
-                "texts": texts_used,
-                "embeddings": result["embeddings"],
-            }, ensure_ascii=False, indent=2)
+            dl_data = json.dumps(
+                {
+                    "model": result["model"],
+                    "texts": texts_used,
+                    "embeddings": result["embeddings"],
+                },
+                ensure_ascii=False,
+                indent=2,
+            )
             st.download_button(
                 "💾 Télécharger JSON",
                 data=dl_data,
@@ -383,14 +417,17 @@ with tab1:
                 use_container_width=True,
             )
         else:
-            st.markdown("""
+            st.markdown(
+                """
             <div class="card" style="text-align:center; padding:3rem 1rem; color:#6b7280;">
               <div style="font-size:2.5rem; margin-bottom:0.8rem;">🔮</div>
               <div style="font-family:'Space Mono',monospace; font-size:0.8rem;">
                 Les vecteurs apparaîtront ici
               </div>
             </div>
-            """, unsafe_allow_html=True)
+            """,
+                unsafe_allow_html=True,
+            )
 
 
 # ═══ Tab 2 — Similarity ═══════════════════════════════════════════════════════
@@ -400,13 +437,19 @@ with tab2:
 
     col_a, col_b = st.columns(2, gap="large")
     with col_a:
-        text_a = st.text_area("Texte A", height=130,
-                              placeholder="Le chat mange du poisson.",
-                              label_visibility="visible")
+        text_a = st.text_area(
+            "Texte A",
+            height=130,
+            placeholder="Le chat mange du poisson.",
+            label_visibility="visible",
+        )
     with col_b:
-        text_b = st.text_area("Texte B", height=130,
-                              placeholder="Le félin se nourrit de poisson.",
-                              label_visibility="visible")
+        text_b = st.text_area(
+            "Texte B",
+            height=130,
+            placeholder="Le félin se nourrit de poisson.",
+            label_visibility="visible",
+        )
 
     if st.button("🔁 Calculer la similarité", use_container_width=False):
         if not text_a.strip() or not text_b.strip():
@@ -428,32 +471,43 @@ with tab2:
         col_score, col_gauge = st.columns([1, 2], gap="large")
         with col_score:
             color = "#46e8b0" if sim_score > 0.7 else "#f7c46a" if sim_score > 0.4 else "#f87171"
-            label = "Très similaires" if sim_score > 0.7 else "Assez similaires" if sim_score > 0.4 else "Peu similaires"
-            st.markdown(f"""
+            label = (
+                "Très similaires"
+                if sim_score > 0.7
+                else "Assez similaires"
+                if sim_score > 0.4
+                else "Peu similaires"
+            )
+            st.markdown(
+                f"""
             <div class="card" style="text-align:center;">
               <div class="card-title">Similarité cosinus</div>
               <div class="metric-big" style="color:{color}">{sim_score:.4f}</div>
               <div class="metric-label">{label}</div>
             </div>
-            """, unsafe_allow_html=True)
+            """,
+                unsafe_allow_html=True,
+            )
 
         with col_gauge:
-            fig = go.Figure(go.Indicator(
-                mode="gauge+number",
-                value=sim_score,
-                number={"font": {"color": color, "size": 36}},
-                gauge={
-                    "axis": {"range": [-1, 1], "tickcolor": "#6b7280"},
-                    "bar": {"color": color, "thickness": 0.3},
-                    "bgcolor": "#1e2130",
-                    "bordercolor": "#252837",
-                    "steps": [
-                        {"range": [-1, 0.4], "color": "#1a1d2e"},
-                        {"range": [0.4, 0.7], "color": "#1f2535"},
-                        {"range": [0.7, 1.0], "color": "#1a2d28"},
-                    ],
-                },
-            ))
+            fig = go.Figure(
+                go.Indicator(
+                    mode="gauge+number",
+                    value=sim_score,
+                    number={"font": {"color": color, "size": 36}},
+                    gauge={
+                        "axis": {"range": [-1, 1], "tickcolor": "#6b7280"},
+                        "bar": {"color": color, "thickness": 0.3},
+                        "bgcolor": "#1e2130",
+                        "bordercolor": "#252837",
+                        "steps": [
+                            {"range": [-1, 0.4], "color": "#1a1d2e"},
+                            {"range": [0.4, 0.7], "color": "#1f2535"},
+                            {"range": [0.7, 1.0], "color": "#1a2d28"},
+                        ],
+                    },
+                )
+            )
             fig.update_layout(
                 height=200,
                 margin=dict(l=20, r=20, t=20, b=10),
@@ -466,7 +520,9 @@ with tab2:
 # ═══ Tab 3 — Similarity matrix ════════════════════════════════════════════════════
 with tab3:
     st.markdown("### Visualiser la matrice de similarité")
-    st.caption("Calculez les embeddings dans l'onglet **Embeddings** puis visualisez les relations entre vos textes.")
+    st.caption(
+        "Calculez les embeddings dans l'onglet **Embeddings** puis visualisez les relations entre vos textes."
+    )
 
     result = st.session_state.get("last_embed_result")
     texts_used = st.session_state.get("last_embed_texts", [])
@@ -477,9 +533,11 @@ with tab3:
 
         fig = px.imshow(
             matrix,
-            x=labels, y=labels,
+            x=labels,
+            y=labels,
             color_continuous_scale=[[0, "#0d0f14"], [0.5, "#7c6af7"], [1, "#46e8b0"]],
-            zmin=-1, zmax=1,
+            zmin=-1,
+            zmax=1,
             text_auto=".2f",
             aspect="auto",
         )
@@ -505,19 +563,24 @@ with tab3:
             c3.metric("Sim. min", f"{upper.min():.4f}")
 
     else:
-        st.markdown("""
+        st.markdown(
+            """
         <div class="card" style="text-align:center; padding:3rem 1rem; color:#6b7280;">
           <div style="font-size:2.5rem; margin-bottom:0.8rem;">📊</div>
           <div style="font-family:'Space Mono',monospace; font-size:0.8rem;">
             Calculez d'abord des embeddings (≥2 textes)<br>dans l'onglet Embeddings
           </div>
         </div>
-        """, unsafe_allow_html=True)
+        """,
+            unsafe_allow_html=True,
+        )
 
 # ═══ Tab 4 — Embedding Projector ══════════════════════════════════════════════
 with tab4:
     st.markdown("### 🔭 Projecteur d'embeddings")
-    st.caption("Visualisation 2D/3D de l'espace sémantique · PCA, UMAP ou t-SNE · Export HTML autonome")
+    st.caption(
+        "Visualisation 2D/3D de l'espace sémantique · PCA, UMAP ou t-SNE · Export HTML autonome"
+    )
 
     result = st.session_state.get("last_embed_result")
     texts_used = st.session_state.get("last_embed_texts", [])
@@ -526,8 +589,9 @@ with tab4:
 
     with col_cfg:
         st.markdown('<div class="card-title">Configuration</div>', unsafe_allow_html=True)
-        proj_method = st.selectbox("Méthode de réduction", ["umap", "pca", "tsne"],
-                                   format_func=lambda x: x.upper())
+        proj_method = st.selectbox(
+            "Méthode de réduction", ["umap", "pca", "tsne"], format_func=lambda x: x.upper()
+        )
         proj_dim = st.radio("Dimensions", ["2D", "3D"], horizontal=True)
         n_clusters = st.slider("Clusters (K-Means)", 2, 12, 5)
 
@@ -545,14 +609,17 @@ with tab4:
 
     with col_main:
         if not result or len(result.get("embeddings", [])) < 2:
-            st.markdown("""
+            st.markdown(
+                """
             <div class="card" style="text-align:center; padding:4rem 1rem; color:#6b7280;">
               <div style="font-size:3rem; margin-bottom:1rem;">🔭</div>
               <div style="font-family:'Space Mono',monospace; font-size:0.8rem;">
                 Calculez d'abord des embeddings (≥2 textes)<br>dans l'onglet <strong>Embeddings</strong>
               </div>
             </div>
-            """, unsafe_allow_html=True)
+            """,
+                unsafe_allow_html=True,
+            )
         else:
             embeddings = result["embeddings"]
             labels = texts_used
@@ -562,11 +629,17 @@ with tab4:
                     try:
                         proj = EmbeddingProjector(embeddings, labels=labels)
                         if proj_dim == "2D":
-                            fig = proj.plot(method=proj_method, n_clusters=n_clusters,
-                                            title="Embedding Projector")
+                            fig = proj.plot(
+                                method=proj_method,
+                                n_clusters=n_clusters,
+                                title="Embedding Projector",
+                            )
                         else:
-                            fig = proj.plot3d(method=proj_method, n_clusters=n_clusters,
-                                              title="Embedding Projector 3D")
+                            fig = proj.plot3d(
+                                method=proj_method,
+                                n_clusters=n_clusters,
+                                title="Embedding Projector 3D",
+                            )
                         st.session_state["proj_fig"] = fig
                         st.session_state["proj_obj"] = proj
                         st.session_state["proj_method"] = proj_method
@@ -591,6 +664,7 @@ with tab4:
                 if proj_obj:
                     with st.spinner("Export HTML en cours..."):
                         import tempfile
+
                         with tempfile.NamedTemporaryFile(suffix=".html", delete=False) as tmp:
                             proj_obj.export_html(
                                 output_path=tmp.name,

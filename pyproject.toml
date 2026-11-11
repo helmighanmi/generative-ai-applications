@@ -17,15 +17,19 @@ authors = [{name = "GHANMI Helmi"}]
 license = "MIT"
 dependencies = []
 
+[tool.setuptools]
+# The repository root is a tooling workspace, not an importable distribution.
+packages = []
+
 [project.optional-dependencies]
 dev = [
   "pytest>=8.3,<9",
-  "ruff>=0.12,<1",
+  "ruff==0.17.4",
   "mypy>=1.15,<2",
   "pre-commit>=4,<5",
-  "pip-audit>=2.9,<3",
+  "pip-audit==2.10.1",
   "numpy>=1.26,<3",
-  "pymupdf>=1.24,<2",
+  "pymupdf>=1.24.3,<2",
   "opencv-python-headless>=4.10,<5",
   "scikit-learn>=1.5,<2",
   "fastapi>=0.115,<1",
@@ -37,11 +41,7 @@ dev = [
 [tool.ruff]
 target-version = "py311"
 line-length = 100
-exclude = [
-  "**/*.ipynb",
-  "projects/pplx-embed-project/streamlit_app/app.py",
-  "projects/pplx-embed-project/scripts/export_projector.py",
-]
+exclude = ["**/*.ipynb"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "SIM"]

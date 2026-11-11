@@ -14,18 +14,18 @@ from __future__ import annotations
 
 from collections import deque
 from dataclasses import dataclass
-from enum import Enum
+from enum import StrEnum
 from typing import Any
 
 import cv2
-import fitz
 import numpy as np
+import pymupdf
 from sklearn.cluster import DBSCAN
 from sklearn.ensemble import IsolationForest
 from sklearn.preprocessing import StandardScaler
 
 
-class PageType(str, Enum):
+class PageType(StrEnum):
     """Supported binary page classes."""
 
     DOCUMENT = "document"
@@ -55,7 +55,7 @@ class LayoutClassifier:
         self.occupancy_threshold = occupancy_threshold
         self.cluster_threshold = cluster_threshold
 
-    def classify(self, page: fitz.Page) -> ClassificationResult:
+    def classify(self, page: pymupdf.Page) -> ClassificationResult:
         words = page.get_text("words")
         blocks = page.get_text("blocks")
         occupancy = _occupancy(page, blocks, grid_size=20)
@@ -92,7 +92,7 @@ class VisualLayoutClassifier:
         self.resolution = resolution
         self.edge_threshold = edge_threshold
 
-    def classify(self, page: fitz.Page) -> ClassificationResult:
+    def classify(self, page: pymupdf.Page) -> ClassificationResult:
         gray = _render_gray(page, self.resolution)
         sobel_x = cv2.Sobel(gray, cv2.CV_64F, 1, 0, ksize=3)
         sobel_y = cv2.Sobel(gray, cv2.CV_64F, 0, 1, ksize=3)
@@ -128,7 +128,7 @@ class HybridClassifier:
         self.layout_weight = layout_weight
         self.visual_weight = visual_weight
 
-    def classify(self, page: fitz.Page) -> ClassificationResult:
+    def classify(self, page: pymupdf.Page) -> ClassificationResult:
         layout_result = self.layout.classify(page)
         visual_result = self.visual.classify(page)
 
@@ -162,7 +162,7 @@ class ImprovedPDFClassifier:
         self.thresholds: dict[str, float] = {}
         self.history: deque[ClassificationResult] = deque(maxlen=100)
 
-    def extract_features(self, page: fitz.Page) -> dict[str, float]:
+    def extract_features(self, page: pymupdf.Page) -> dict[str, float]:
         words = page.get_text("words")
         blocks = page.get_text("blocks")
         features: dict[str, float] = {
@@ -185,7 +185,7 @@ class ImprovedPDFClassifier:
 
         return features
 
-    def calibrate(self, pages: list[fitz.Page]) -> dict[str, float]:
+    def calibrate(self, pages: list[pymupdf.Page]) -> dict[str, float]:
         if len(pages) < 2:
             raise ValueError("calibration requires at least two pages")
 
@@ -202,7 +202,7 @@ class ImprovedPDFClassifier:
         self.calibrated = True
         return dict(self.thresholds)
 
-    def classify(self, page: fitz.Page) -> ClassificationResult:
+    def classify(self, page: pymupdf.Page) -> ClassificationResult:
         features = self.extract_features(page)
         anomaly_score = 0.0
         is_anomaly = False
@@ -268,8 +268,8 @@ def _signed_document_score(result: ClassificationResult) -> float:
     return result.confidence if result.page_type is PageType.DOCUMENT else -result.confidence
 
 
-def _render_gray(page: fitz.Page, resolution: int) -> np.ndarray:
-    matrix = fitz.Matrix(resolution / 72.0, resolution / 72.0)
+def _render_gray(page: pymupdf.Page, resolution: int) -> np.ndarray:
+    matrix = pymupdf.Matrix(resolution / 72.0, resolution / 72.0)
     pixmap = page.get_pixmap(matrix=matrix, alpha=False)
     image = np.frombuffer(pixmap.samples, dtype=np.uint8).reshape(
         pixmap.height, pixmap.width, pixmap.n
@@ -279,7 +279,7 @@ def _render_gray(page: fitz.Page, resolution: int) -> np.ndarray:
     return cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
 
 
-def _occupancy(page: fitz.Page, blocks: list[tuple], grid_size: int) -> float:
+def _occupancy(page: pymupdf.Page, blocks: list[tuple], grid_size: int) -> float:
     if not blocks:
         return 0.0
 

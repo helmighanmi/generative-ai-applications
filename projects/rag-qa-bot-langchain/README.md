@@ -17,7 +17,7 @@ PDF
  └─ PyPDFLoader
      └─ RecursiveCharacterTextSplitter
          └─ HuggingFaceEmbeddings
-             └─ Chroma retriever
+             └─ FAISS retriever
                  └─ RagQABot
                      └─ HuggingFaceEndpoint
 ```

@@ -31,7 +31,9 @@ class RagQABot:
         if not query.strip():
             raise ValueError("query must not be empty")
         documents = self.retriever.invoke(query)
-        context = "\n\n".join(getattr(document, "page_content", str(document)) for document in documents)
+        context = "\n\n".join(
+            getattr(document, "page_content", str(document)) for document in documents
+        )
         prompt = (
             "Answer the question using only the context below. If the answer is not in the "
             "context, say that you do not have enough information.\n\n"
@@ -55,15 +57,17 @@ def build_qa_bot(
     if top_k < 1:
         raise ValueError("top_k must be positive")
 
-    from langchain_chroma import Chroma
     from langchain_community.document_loaders import PyPDFLoader
+    from langchain_community.vectorstores import FAISS
     from langchain_huggingface import HuggingFaceEmbeddings, HuggingFaceEndpoint
     from langchain_text_splitters import RecursiveCharacterTextSplitter
 
     pages = PyPDFLoader(str(path)).load()
-    documents = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200).split_documents(pages)
+    documents = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200).split_documents(
+        pages
+    )
     embeddings = HuggingFaceEmbeddings(model_name=embedding_model)
-    vector_store = Chroma.from_documents(documents=documents, embedding=embeddings)
+    vector_store = FAISS.from_documents(documents=documents, embedding=embeddings)
     retriever = vector_store.as_retriever(search_kwargs={"k": top_k})
     llm = HuggingFaceEndpoint(repo_id=llm_repo, temperature=0.2, max_new_tokens=256)
     return RagQABot(retriever=retriever, llm=llm)

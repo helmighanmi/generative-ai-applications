@@ -6,24 +6,23 @@
 
 from __future__ import annotations
 
-import fitz
+import pymupdf
 import pytest
-
 from pdf_page_classifier import HybridClassifier, ImprovedPDFClassifier, PageType
 from pdf_page_classifier.classifier import ClassificationResult, _signed_document_score
 
 
-def _document_with_pages() -> fitz.Document:
-    document = fitz.open()
+def _document_with_pages() -> pymupdf.Document:
+    document = pymupdf.open()
     text_page = document.new_page()
     text_page.insert_textbox(
-        fitz.Rect(50, 50, 550, 750),
+        pymupdf.Rect(50, 50, 550, 750),
         ("Applied mathematics and artificial intelligence engineering. " * 80),
         fontsize=10,
     )
     diagram_page = document.new_page()
     for offset in range(50, 500, 50):
-        diagram_page.draw_rect(fitz.Rect(offset, offset, offset + 35, offset + 35))
+        diagram_page.draw_rect(pymupdf.Rect(offset, offset, offset + 35, offset + 35))
         diagram_page.draw_line((50, offset), (550, 800 - offset))
     return document
 

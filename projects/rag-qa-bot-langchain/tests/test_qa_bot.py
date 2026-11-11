@@ -9,7 +9,6 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 import pytest
-
 from rag_qa_bot.qa_bot import RagQABot
 
 

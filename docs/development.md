@@ -17,11 +17,12 @@ python3.11 -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
 pip install -e '.[dev]'
-make lint
-make format-check
-make compile
+make check   # lint + format check + compile + Markdown link check
 make test
 ```
+
+`make check` runs the same static gates as `CI / repository-quality`. Ruff is pinned; do not rely on a
+globally installed version.
 
 For a specific project, follow its README and install only that project's dependencies. This avoids dependency conflicts between experimental LangChain code, scientific document processing, and model-serving stacks.
 

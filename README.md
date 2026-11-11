@@ -53,7 +53,7 @@ Cross-cutting engineering material lives in [`docs/`](docs/), root automation in
 
 ## Python baseline
 
-**Python 3.11** is the repository baseline. The projects combine scientific Python, PyTorch/sentence-transformers, FAISS, OpenCV/PyMuPDF, and LangChain. Python 3.11 is intentionally conservative for AI/ML binary-wheel compatibility while remaining actively supported and modern.
+**Python 3.11** is the repository baseline (last verified: 2026-11-08). The projects combine scientific Python, PyTorch/sentence-transformers, FAISS, OpenCV/PyMuPDF, and LangChain. Python 3.11 is intentionally conservative for AI/ML binary-wheel compatibility while remaining actively supported and modern.
 
 See [`docs/decisions/001-python-runtime.md`](docs/decisions/001-python-runtime.md) for the decision record.
 
@@ -82,14 +82,17 @@ Each subproject has its own installation and run instructions because their runt
 Pull requests are expected to pass:
 
 - Python syntax compilation
-- Ruff lint and formatting checks
-- project unit tests
-- dependency metadata validation
+- Ruff lint and formatting checks (pinned `ruff==0.17.4`)
+- project unit tests for all five projects
+- cross-process integration tests (`integration-smoke`, including FAISS build -> save -> reload -> retrieval)
+- dependency metadata validation (`pip check`)
+- dependency auditing for every project (Linux CI is authoritative)
 - secret-pattern checks
-- Docker build validation for service projects
+- Docker build validation and an API container smoke test using the deterministic fake embedder
 - CodeQL security analysis
 
-CI never converts a failing test into a successful build.
+CI never converts a failing test into a successful build. Audit exceptions must follow
+[`docs/security-audit-policy.md`](docs/security-audit-policy.md), including an owner and expiry date.
 
 ## Public repository / secrets policy
 
@@ -103,6 +106,7 @@ The example values in this repository are placeholders only.
 - [`docs/development.md`](docs/development.md) — local development workflow
 - [`docs/testing.md`](docs/testing.md) — software tests vs AI evaluation
 - [`docs/security.md`](docs/security.md) — public-repository security practices
+- [`docs/security-audit-policy.md`](docs/security-audit-policy.md) — dependency audit exceptions and expiry
 - [`docs/runbook.md`](docs/runbook.md) — operational checks and troubleshooting
 - [`docs/decisions/`](docs/decisions/) — architecture decision records (ADRs)
 

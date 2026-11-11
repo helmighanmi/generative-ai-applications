@@ -8,7 +8,6 @@ from __future__ import annotations
 
 import numpy as np
 import plotly.graph_objects as go
-
 from scripts.export_projector import EmbeddingProjector
 
 

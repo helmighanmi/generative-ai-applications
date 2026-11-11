@@ -4,21 +4,48 @@
 # Past Role: Researcher in Applied Mathematics
 # Research Profile: https://www.researchgate.net/profile/Ghanmi-Helmi
 
+# Policy
+# ------
+# * One grouped PR per ecosystem (actions + Python) instead of one PR per dependency.
+# * Major bumps are ignored: project requirements deliberately carry upper bounds
+#   (<N) because the upgrade needs code changes and cross-project testing.
+#   Ignore rules only affect *version* updates, never security updates, so CVE
+#   fixes still arrive as PRs.
+# * open-pull-requests-limit caps version-update PRs; security PRs have their own
+#   fixed limit of 10 and are unaffected.
+# * cooldown lets a release settle before it is proposed.
+# To take a major bump deliberately, bump the pin in the relevant
+# requirements/pyproject file and let Dependabot refresh the minor/patch line.
+
 version: 2
 updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
+    open-pull-requests-limit: 2
+    cooldown:
+      default-days: 7
+    groups:
+      actions:
+        patterns: ["*"]
+
   - package-ecosystem: "pip"
-    directory: "/"
+    directories:
+      - "/"
+      - "/projects/document-parsing"
+      - "/projects/langchain"
+      - "/projects/multimodal-rag-pipeline"
+      - "/projects/pplx-embed-project"
+      - "/projects/rag-qa-bot-langchain"
     schedule:
       interval: "weekly"
-  - package-ecosystem: "pip"
-    directory: "/projects/pplx-embed-project"
-    schedule:
-      interval: "weekly"
-  - package-ecosystem: "pip"
-    directory: "/projects/multimodal-rag-pipeline"
-    schedule:
-      interval: "weekly"
+    open-pull-requests-limit: 2
+    cooldown:
+      default-days: 7
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+    groups:
+      python-deps:
+        patterns: ["*"]

@@ -16,11 +16,14 @@ on:
 
 permissions:
   contents: read
-  security-events: write
 
 jobs:
   codeql:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      security-events: write
     steps:
       - uses: actions/checkout@v7
       - uses: github/codeql-action/init@v4
@@ -30,12 +33,44 @@ jobs:
 
   dependency-audit:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - project: document-parsing
+            package: pdf-page-classifier
+            install: "."
+          - project: langchain
+            package: langchain-foundations
+            install: "."
+          - project: multimodal-rag-pipeline
+            package: multimodal-rag-pipeline
+            # The provider stack lives in the `ai` extra; without it the
+            # transformers/torch/openai advisories are never resolved.
+            install: ".[ai]"
+          - project: pplx-embed-project
+            package: pplx-embed
+            install: "."
+          - project: rag-qa-bot-langchain
+            package: rag-qa-bot-langchain
+            install: "."
+    defaults:
+      run:
+        working-directory: projects/${{ matrix.project }}
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-python@v7
         with:
           python-version: "3.11"
-      - name: Audit API runtime dependencies
+          cache: pip
+      - name: Audit resolved dependencies
         run: |
-          python -m pip install --upgrade pip pip-audit
-          pip-audit -r projects/pplx-embed-project/api/requirements.txt
+          python -m venv "$RUNNER_TEMP/audit"
+          source "$RUNNER_TEMP/audit/bin/activate"
+          python -m pip install --upgrade pip setuptools wheel
+          pip install 'pip-audit==2.10.1'
+          pip install "${{ matrix.install }}"
+          pip check
+          pip freeze --exclude "${{ matrix.package }}" > "$RUNNER_TEMP/requirements.txt"
+          pip-audit --strict -r "$RUNNER_TEMP/requirements.txt"

@@ -18,11 +18,13 @@ requires-python = ">=3.11,<3.12"
 authors = [{name = "GHANMI Helmi"}]
 keywords = ["embeddings", "nlp", "rag", "fastapi", "sentence-transformers", "local-ai"]
 dependencies = [
-  "sentence-transformers>=5.2,<7",
-  "transformers>=4.51,<5",
-  "torch>=2.2,<3",
+  "sentence-transformers>=6.2,<7",
+  "transformers>=5.22,<6",
+  # PyTorch no longer publishes wheels for Intel macOS; keep that platform local-only.
+  "torch>=2.15,<3; platform_system != 'Darwin' or platform_machine != 'x86_64'",
+  "torch>=2.2,<2.3; platform_system == 'Darwin' and platform_machine == 'x86_64'",
   "numpy>=1.26,<3",
-  "huggingface-hub>=0.30,<2",
+  "huggingface-hub>=1.31,<3",
   "fastapi>=0.115,<1",
   "uvicorn[standard]>=0.30,<1",
   "pydantic>=2.8,<3",
@@ -35,7 +37,7 @@ dev = [
   "pplx-embed[ui,projector]",
   "httpx>=0.27,<1",
   "pytest>=8.3,<9",
-  "ruff>=0.12,<1",
+  "ruff==0.17.4",
   "mypy>=1.15,<2",
   "pre-commit>=4,<5",
 ]
@@ -43,9 +45,6 @@ dev = [
 [tool.setuptools.packages.find]
 include = ["api*", "streamlit_app*", "scripts*"]
 
-[tool.ruff]
-line-length = 100
-target-version = "py311"
-
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+pythonpath = ["."]
