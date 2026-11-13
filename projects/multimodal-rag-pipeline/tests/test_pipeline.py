@@ -111,6 +111,17 @@ def test_generator_uses_openai_message_attributes() -> None:
     assert answer == "grounded answer"
 
 
+def test_search_rejects_a_mismatched_query_dimension(tmp_path: Path) -> None:
+    store = FaissVectorStore(str(tmp_path / "faiss.index"), str(tmp_path / "metadata.json"))
+    store.build(
+        [np.zeros(8, dtype=np.float32), np.ones(8, dtype=np.float32)],
+        [{"page": 0, "type": "text"}, {"page": 1, "type": "text"}],
+    )
+
+    with pytest.raises(ValueError, match="index expects 8"):
+        store.search(np.zeros(4, dtype=np.float32))
+
+
 def test_index_survives_a_process_boundary(tmp_path: Path) -> None:
     index_path = tmp_path / "faiss.index"
     metadata_path = tmp_path / "metadata.json"

@@ -97,7 +97,10 @@ For production, pin `MODEL_REVISION` to a reviewed model commit rather than trac
 make test
 ```
 
-API tests inject a deterministic fake embedder, so pull requests do not require network access or model downloads. Projector tests exercise PCA and HTML export independently of the model-serving path.
+API tests inject a deterministic fake embedder, so pull requests do not require network access or
+model downloads. Projector tests exercise PCA, t-SNE, tiny-dataset fallbacks, and offline HTML
+export independently of the model-serving path. Exported HTML bundles Plotly JS and makes no
+external CDN or font requests.
 
 To run the API without a model locally or in a container:
 

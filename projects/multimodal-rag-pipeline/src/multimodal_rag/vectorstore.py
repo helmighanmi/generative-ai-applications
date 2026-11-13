@@ -63,5 +63,10 @@ class FaissVectorStore:
         if top_k < 1:
             raise ValueError("top_k must be positive")
         query = np.asarray(query_embedding, dtype=np.float32).reshape(1, -1)
+        if query.shape[1] != self.index.d:
+            raise ValueError(
+                f"query embedding has {query.shape[1]} dimensions but the index expects "
+                f"{self.index.d}; rebuild the index or use a matching embedding model"
+            )
         _, indices = self.index.search(query, min(top_k, len(self.metadata)))
         return [self.metadata[index] for index in indices[0] if 0 <= index < len(self.metadata)]

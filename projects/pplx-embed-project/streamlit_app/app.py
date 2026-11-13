@@ -12,6 +12,7 @@ Connects to the FastAPI backend running on localhost:8000.
 import json
 import os
 import sys
+import tempfile
 from pathlib import Path
 
 import numpy as np
@@ -40,8 +41,6 @@ st.set_page_config(
 st.markdown(
     """
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap');
-
   :root {
     --bg: #0d0f14;
     --surface: #161920;
@@ -373,6 +372,9 @@ with tab1:
                         result = api_embed(texts, batch_size=batch_size)
                         st.session_state["last_embed_result"] = result
                         st.session_state["last_embed_texts"] = texts
+                        # A new embedding set invalidates any cached projection.
+                        for key in ("proj_fig", "proj_obj", "proj_config", "proj_method"):
+                            st.session_state.pop(key, None)
                     except Exception as e:
                         st.error(f"Erreur : {e}")
                         result = None
@@ -623,8 +625,13 @@ with tab4:
         else:
             embeddings = result["embeddings"]
             labels = texts_used
+            projection_config = {
+                "method": proj_method,
+                "dimensions": proj_dim,
+                "clusters": n_clusters,
+            }
 
-            if run_proj or "proj_fig" not in st.session_state:
+            if run_proj or st.session_state.get("proj_config") != projection_config:
                 with st.spinner(f"Réduction {proj_method.upper()} en cours..."):
                     try:
                         proj = EmbeddingProjector(embeddings, labels=labels)
@@ -643,7 +650,9 @@ with tab4:
                         st.session_state["proj_fig"] = fig
                         st.session_state["proj_obj"] = proj
                         st.session_state["proj_method"] = proj_method
+                        st.session_state["proj_config"] = projection_config
                     except Exception as e:
+                        st.session_state.pop("proj_fig", None)
                         st.error(f"Erreur projection : {e}")
 
             proj_fig = st.session_state.get("proj_fig")
@@ -662,17 +671,19 @@ with tab4:
             if export_btn:
                 proj_obj = st.session_state.get("proj_obj")
                 if proj_obj:
-                    with st.spinner("Export HTML en cours..."):
-                        import tempfile
-
-                        with tempfile.NamedTemporaryFile(suffix=".html", delete=False) as tmp:
-                            proj_obj.export_html(
-                                output_path=tmp.name,
-                                method=st.session_state.get("proj_method", "pca"),
-                                n_clusters=n_clusters,
-                                title="Embedding Projector — pplx-embed-v1",
-                            )
-                            html_bytes = Path(tmp.name).read_bytes()
+                    with (
+                        st.spinner("Export HTML en cours..."),
+                        tempfile.TemporaryDirectory() as tmpdir,
+                    ):
+                        target = Path(tmpdir) / "projector.html"
+                        proj_obj.export_html(
+                            output_path=str(target),
+                            method=proj_method,  # type: ignore[arg-type]
+                            include_3d=len(embeddings) >= 3,
+                            n_clusters=n_clusters,
+                            title="Embedding Projector — pplx-embed-v1",
+                        )
+                        html_bytes = target.read_bytes()
 
                     st.download_button(
                         "⬇️ Télécharger projector.html",
