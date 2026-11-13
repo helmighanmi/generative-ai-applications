@@ -35,6 +35,7 @@ import argparse
 import json
 import os
 import warnings
+from html import escape
 from pathlib import Path
 from typing import Literal
 
@@ -110,8 +111,17 @@ class EmbeddingProjector:
         labels: list[str] | None = None,
         categories: list | None = None,
     ):
-        self.embeddings = normalize(np.array(embeddings, dtype=np.float32))
+        array = np.asarray(embeddings, dtype=np.float32)
+        if array.ndim != 2 or array.shape[0] == 0 or array.shape[1] == 0:
+            raise ValueError("embeddings must be a non-empty 2D array")
+
+        self.embeddings = normalize(array)
         n = len(self.embeddings)
+        if labels is not None and len(labels) != n:
+            raise ValueError("labels must contain one entry per embedding")
+        if categories is not None and len(categories) != n:
+            raise ValueError("categories must contain one entry per embedding")
+
         self.labels = labels or [f"text_{i}" for i in range(n)]
         self.categories = categories
         self._reduced: dict[str, np.ndarray] = {}
@@ -129,17 +139,23 @@ class EmbeddingProjector:
     def _reduce_umap(self, n_components: int = 2) -> np.ndarray:
         key = f"umap{n_components}"
         if key not in self._reduced:
+            n = len(self.embeddings)
+            # UMAP needs at least two neighbours, so very small datasets use PCA.
+            if n < 3 or n_components >= n:
+                self._reduced[key] = self._reduce_pca(n_components)
+                return self._reduced[key]
+
             try:
                 from umap import UMAP  # type: ignore
             except ImportError:
                 print("⚠️  umap-learn not installed → falling back to PCA.")
                 print("   Install it: pip install umap-learn")
-                return self._reduce_pca(n_components)
-            n = len(self.embeddings)
-            n_neighbors = min(15, n - 1)
+                self._reduced[key] = self._reduce_pca(n_components)
+                return self._reduced[key]
+
             reducer = UMAP(
                 n_components=n_components,
-                n_neighbors=n_neighbors,
+                n_neighbors=min(15, n - 1),
                 min_dist=0.1,
                 metric="cosine",
                 random_state=42,
@@ -152,19 +168,32 @@ class EmbeddingProjector:
         key = f"tsne{n_components}"
         if key not in self._reduced:
             n = len(self.embeddings)
-            perplexity = min(30, max(5, n // 3))
+            # t-SNE requires perplexity < n; small datasets fall back to PCA.
+            if n < 3 or n_components >= n:
+                self._reduced[key] = self._reduce_pca(n_components)
+                return self._reduced[key]
+
+            perplexity = min(30.0, max(5.0, n / 3.0), float(n - 1))
             tsne = TSNE(
                 n_components=n_components,
                 perplexity=perplexity,
                 metric="cosine",
                 random_state=42,
-                n_iter=1000,
+                max_iter=1000,
                 verbose=0,
             )
             self._reduced[key] = tsne.fit_transform(self.embeddings)
         return self._reduced[key]
 
     def reduce(self, method: Method = "pca", n_components: int = 2) -> np.ndarray:
+        if method not in {"pca", "umap", "tsne"}:
+            raise ValueError(f"unsupported reduction method: {method}")
+        max_components = min(self.embeddings.shape)
+        if n_components < 1 or n_components > max_components:
+            raise ValueError(
+                f"n_components must be between 1 and {max_components} for "
+                f"{len(self.embeddings)} embeddings"
+            )
         dispatch = {"pca": self._reduce_pca, "umap": self._reduce_umap, "tsne": self._reduce_tsne}
         return dispatch[method](n_components)
 
@@ -397,8 +426,9 @@ class EmbeddingProjector:
     ) -> str:
         """
         Export a fully standalone HTML file (no server needed, shareable).
-        All Plotly JS is bundled inline.
+        Plotly JS is bundled inline and no external font/CDN requests are made.
         """
+        safe_title = escape(title)
         fig2d = self.plot(method=method, n_clusters=n_clusters, title=title)
         fig3d = (
             self.plot3d(method=method, n_clusters=n_clusters, title=f"{title} — 3D")
@@ -407,7 +437,7 @@ class EmbeddingProjector:
         )
         fig_var = self.plot_variance()
 
-        html_2d = fig2d.to_html(full_html=False, include_plotlyjs="cdn", div_id="plot2d")
+        html_2d = fig2d.to_html(full_html=False, include_plotlyjs=True, div_id="plot2d")
         html_3d = (
             fig3d.to_html(full_html=False, include_plotlyjs=False, div_id="plot3d") if fig3d else ""
         )
@@ -422,9 +452,8 @@ class EmbeddingProjector:
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>{title}</title>
+<title>{safe_title}</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap');
   *, *::before, *::after {{ box-sizing: border-box; }}
   :root {{
     --bg: #0d0f14; --surface: #161920; --surface2: #1e2130;
@@ -482,7 +511,7 @@ class EmbeddingProjector:
 
 <header>
   <div>
-    <h1>🧠 {title}</h1>
+    <h1>🧠 {safe_title}</h1>
     <p>Exploration de l'espace des embeddings · <strong>pplx-embed-v1-0.6B</strong></p>
   </div>
   <div style="margin-left:auto">
@@ -496,7 +525,7 @@ class EmbeddingProjector:
   <div class="stat"><div class="stat-val">{n}</div><div class="stat-lbl">Points</div></div>
   <div class="stat"><div class="stat-val">{dim}</div><div class="stat-lbl">Dimensions</div></div>
   <div class="stat"><div class="stat-val">{method_label}</div><div class="stat-lbl">Réduction</div></div>
-  <div class="stat"><div class="stat-val">1024→2</div><div class="stat-lbl">Projection</div></div>
+  <div class="stat"><div class="stat-val">{dim}→2</div><div class="stat-lbl">Projection</div></div>
 </div>
 
 <nav>
@@ -630,6 +659,11 @@ def main():
         categories = data.get("categories", None)
 
     # ── Project & export ───────────────────────────────────────────────────────
+    if not embeddings:
+        raise SystemExit("No embeddings to project; provide a non-empty input file.")
+    if args.clusters < 1:
+        raise SystemExit("--clusters must be at least 1")
+
     print(
         f"⚙️  Reducing {len(embeddings)} vectors ({len(embeddings[0])}D → 2D/3D) with {args.method.upper()}..."
     )
