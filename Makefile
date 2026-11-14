@@ -17,6 +17,11 @@ help:
 
 install:
 	$(PYTHON) -m pip install -e '.[dev]'
+	@for dir in projects/*/; do \
+		project="$${dir%/}"; \
+		echo "Installing $$project"; \
+		$(PYTHON) -m pip install -e "$$project[dev]" || exit 1; \
+	done
 
 lint:
 	ruff check projects labs scripts

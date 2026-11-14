@@ -55,8 +55,8 @@ Linux CI is authoritative; Intel macOS cannot resolve the same `torch` line.
 
 1. Reproduce in a clean Linux environment or container.
 2. Identify the vulnerable package and the first fixed version.
-3. Upgrade the dependency range in the owning `pyproject.toml` (and `api/requirements.txt`
-   for the pplx API).
+3. Upgrade the dependency range in the owning `pyproject.toml`. That file is the only
+   dependency declaration; there are no project requirements files to update.
 4. Re-run `pip-audit --strict`.
 5. If no fixed release exists, follow [`security-audit-policy.md`](security-audit-policy.md).
    Add an expiring `--ignore-vuln` entry with an owner, reason, and mitigation. Never add a

@@ -59,11 +59,11 @@ See [`docs/decisions/001-python-runtime.md`](docs/decisions/001-python-runtime.m
 ## Quick start
 
 ```bash
-# Create a root development environment for repository tooling
+# Create a root environment with tooling and every project in editable mode
 python3.11 -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
-pip install -e '.[dev]'
+make install
 
 # Repository-wide static checks
 make lint
@@ -74,7 +74,10 @@ make compile
 make test
 ```
 
-Each subproject has its own installation and run instructions because their runtime dependency sets differ significantly.
+The root `pyproject.toml` installs tooling only. `make install` also installs each
+project from its own `pyproject.toml`, so the root environment never duplicates
+runtime dependency pins. Each subproject still has its own run instructions
+because their runtime dependency sets differ significantly.
 
 ## Quality gates
 
