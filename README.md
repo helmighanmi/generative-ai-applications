@@ -85,6 +85,8 @@ Pull requests are expected to pass:
 
 - Python syntax compilation
 - Ruff lint and formatting checks (pinned `ruff==0.17.4`)
+- mypy type checking on project source
+- repository structure guard (project skeleton, no dependency duplicates, no author headers)
 - unit tests for all four projects and the lab
 - cross-process integration tests (`integration-smoke`, including FAISS build -> save -> reload -> retrieval)
 - dependency metadata validation (`pip check`)

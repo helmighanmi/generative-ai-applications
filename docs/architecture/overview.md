@@ -2,7 +2,10 @@
 
 ## Monorepo boundary
 
-This repository is a portfolio of independent AI systems and experiments. The root owns engineering policy (CI, security, documentation, developer commands); each folder under `projects/` owns its runtime dependencies and execution model.
+This repository is a portfolio of independent AI systems and experiments. The root
+owns engineering policy (CI, security, documentation, developer commands); each
+folder under `projects/` owns its runtime dependencies and execution model; `labs/`
+holds exploratory notebooks that no project imports.
 
 ```text
 repository
