@@ -28,6 +28,9 @@ Research Profile: https://www.researchgate.net/profile/Ghanmi-Helmi
   clean checkout.
 - Reject query embeddings whose dimension does not match the persisted FAISS index instead of
   letting FAISS abort the process.
+- Added a reproducible page-classification evaluation: deterministic synthetic
+  fixtures, six curated pages, per-model metrics with bootstrap intervals,
+  confusion matrices, and per-page error analysis (`make eval-doc-parsing`).
 
 ## 2.0.0 — Engineering hardening
 
