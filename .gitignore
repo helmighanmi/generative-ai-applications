@@ -224,6 +224,9 @@ models/
 *.pt
 *.pth
 
+# Generated evaluation fixtures (the generator is the fixture)
+projects/document-parsing/evals/fixtures/synthetic/
+
 # Local tool artifacts
 .venv*/
 .DS_Store

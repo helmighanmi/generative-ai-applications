@@ -1,0 +1,263 @@
+{
+  "version": 1,
+  "label_rubric": "A page is 'diagram' when a figure or schematic is the primary explanatory artifact and prose is subordinate. A page is 'document' when extractable text (prose or table) is the primary artifact.",
+  "cases": [
+    {
+      "id": "cal-dense-prose-0",
+      "source": "synthetic",
+      "split": "calibration",
+      "generator": "dense_prose",
+      "variant": 0,
+      "page": 0,
+      "label": "document",
+      "rationale": "Full-page justified prose with no figure."
+    },
+    {
+      "id": "cal-two-columns-0",
+      "source": "synthetic",
+      "split": "calibration",
+      "generator": "two_columns",
+      "variant": 0,
+      "page": 0,
+      "label": "document",
+      "rationale": "Two columns of prose, no figure."
+    },
+    {
+      "id": "cal-text-table-0",
+      "source": "synthetic",
+      "split": "calibration",
+      "generator": "text_table",
+      "variant": 0,
+      "page": 0,
+      "label": "document",
+      "rationale": "Table cells contain extractable text and carry the page content."
+    },
+    {
+      "id": "cal-notes-0",
+      "source": "synthetic",
+      "split": "calibration",
+      "generator": "notes",
+      "variant": 0,
+      "page": 0,
+      "label": "document",
+      "rationale": "Bullet list of sentences, no figure."
+    },
+    {
+      "id": "cal-figure-grid-0",
+      "source": "synthetic",
+      "split": "calibration",
+      "generator": "figure_grid",
+      "variant": 0,
+      "page": 0,
+      "label": "diagram",
+      "rationale": "Grid of shapes with no extractable text."
+    },
+    {
+      "id": "cal-flow-diagram-0",
+      "source": "synthetic",
+      "split": "calibration",
+      "generator": "flow_diagram",
+      "variant": 0,
+      "page": 0,
+      "label": "diagram",
+      "rationale": "Box-and-arrow schematic with only short labels."
+    },
+    {
+      "id": "cal-line-art-0",
+      "source": "synthetic",
+      "split": "calibration",
+      "generator": "line_art",
+      "variant": 0,
+      "page": 0,
+      "label": "diagram",
+      "rationale": "Line art and circles with no text."
+    },
+    {
+      "id": "cal-caption-0",
+      "source": "synthetic",
+      "split": "calibration",
+      "generator": "caption_page",
+      "variant": 0,
+      "page": 0,
+      "label": "diagram",
+      "rationale": "Full-page schematic with a one-line caption."
+    },
+    {
+      "id": "test-dense-prose-1",
+      "source": "synthetic",
+      "split": "test",
+      "generator": "dense_prose",
+      "variant": 1,
+      "page": 0,
+      "label": "document",
+      "rationale": "Full-page justified prose with no figure."
+    },
+    {
+      "id": "test-two-columns-1",
+      "source": "synthetic",
+      "split": "test",
+      "generator": "two_columns",
+      "variant": 1,
+      "page": 0,
+      "label": "document",
+      "rationale": "Two columns of prose, no figure."
+    },
+    {
+      "id": "test-text-table-1",
+      "source": "synthetic",
+      "split": "test",
+      "generator": "text_table",
+      "variant": 1,
+      "page": 0,
+      "label": "document",
+      "rationale": "Table cells contain extractable text and carry the page content."
+    },
+    {
+      "id": "test-notes-1",
+      "source": "synthetic",
+      "split": "test",
+      "generator": "notes",
+      "variant": 1,
+      "page": 0,
+      "label": "document",
+      "rationale": "Bullet list of sentences, no figure."
+    },
+    {
+      "id": "test-figure-grid-1",
+      "source": "synthetic",
+      "split": "test",
+      "generator": "figure_grid",
+      "variant": 1,
+      "page": 0,
+      "label": "diagram",
+      "rationale": "Grid of shapes with no extractable text."
+    },
+    {
+      "id": "test-flow-diagram-1",
+      "source": "synthetic",
+      "split": "test",
+      "generator": "flow_diagram",
+      "variant": 1,
+      "page": 0,
+      "label": "diagram",
+      "rationale": "Box-and-arrow schematic with only short labels."
+    },
+    {
+      "id": "test-line-art-1",
+      "source": "synthetic",
+      "split": "test",
+      "generator": "line_art",
+      "variant": 1,
+      "page": 0,
+      "label": "diagram",
+      "rationale": "Line art and circles with no text."
+    },
+    {
+      "id": "test-caption-1",
+      "source": "synthetic",
+      "split": "test",
+      "generator": "caption_page",
+      "variant": 1,
+      "page": 0,
+      "label": "diagram",
+      "rationale": "Full-page schematic with a one-line caption."
+    },
+    {
+      "id": "test-blank",
+      "source": "synthetic",
+      "split": "test",
+      "generator": "blank_page",
+      "variant": 0,
+      "page": 0,
+      "label": "diagram",
+      "rationale": "Blank page: no extractable text artifact.",
+      "difficulty": "edge"
+    },
+    {
+      "id": "test-scanned-prose",
+      "source": "synthetic",
+      "split": "test",
+      "generator": "scanned_prose",
+      "variant": 1,
+      "page": 0,
+      "label": "document",
+      "rationale": "Scanned prose is a document, but it has no text layer and needs OCR.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "test-title-page",
+      "source": "synthetic",
+      "split": "test",
+      "generator": "title_page",
+      "variant": 0,
+      "page": 0,
+      "label": "document",
+      "rationale": "Short title page: text is the content but sits below the word threshold.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "test-labeled-figure",
+      "source": "synthetic",
+      "split": "test",
+      "generator": "labeled_figure",
+      "variant": 0,
+      "page": 0,
+      "label": "diagram",
+      "rationale": "Schematic with short labels; the figure carries the content."
+    },
+    {
+      "id": "curated-rag-p0",
+      "source": "curated",
+      "split": "test",
+      "document": "fixtures/curated/rag_explainer.pdf",
+      "page": 0,
+      "label": "diagram",
+      "rationale": "Hero retrieval pipeline schematic is the primary artifact; two prose columns support it."
+    },
+    {
+      "id": "curated-rag-p1",
+      "source": "curated",
+      "split": "test",
+      "document": "fixtures/curated/rag_explainer.pdf",
+      "page": 1,
+      "label": "document",
+      "rationale": "Trade-off matrix and two prose sections carry the page content."
+    },
+    {
+      "id": "curated-cars-p0",
+      "source": "curated",
+      "split": "test",
+      "document": "fixtures/curated/hybrid_car_explainer.pdf",
+      "page": 0,
+      "label": "diagram",
+      "rationale": "Energy-flow schematic is the primary artifact."
+    },
+    {
+      "id": "curated-cars-p1",
+      "source": "curated",
+      "split": "test",
+      "document": "fixtures/curated/hybrid_car_explainer.pdf",
+      "page": 1,
+      "label": "document",
+      "rationale": "Trade-off matrix and prose sections carry the page content."
+    },
+    {
+      "id": "curated-cv-p0",
+      "source": "curated",
+      "split": "test",
+      "document": "fixtures/curated/computer_vision_explainer.pdf",
+      "page": 0,
+      "label": "diagram",
+      "rationale": "Perception pipeline schematic is the primary artifact."
+    },
+    {
+      "id": "curated-cv-p1",
+      "source": "curated",
+      "split": "test",
+      "document": "fixtures/curated/computer_vision_explainer.pdf",
+      "page": 1,
+      "label": "document",
+      "rationale": "Metrics table and prose sections carry the page content."
+    }
+  ]
+}

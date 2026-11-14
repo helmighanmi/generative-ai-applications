@@ -6,7 +6,7 @@
 
 PYTHON ?= python
 
-.PHONY: help install lint format format-check compile check test security clean
+.PHONY: help install lint format format-check compile check test eval-doc-parsing security clean
 
 help:
 	@echo "Repository commands:"
@@ -17,6 +17,7 @@ help:
 	@echo "  make compile       Compile all Python source for syntax errors"
 	@echo "  make check         Run every static quality gate used by CI"
 	@echo "  make test          Run lightweight project tests"
+	@echo "  make eval-doc-parsing  Run the page-classification evaluation"
 	@echo "  make security      Audit root environment dependencies"
 	@echo "  make clean         Remove Python cache/build artifacts"
 
@@ -40,6 +41,9 @@ check: lint format-check compile
 
 test:
 	$(PYTHON) scripts/run_tests.py
+
+eval-doc-parsing:
+	$(PYTHON) projects/document-parsing/evals/evaluate.py
 
 security:
 	pip-audit --strict
