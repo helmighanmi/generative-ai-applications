@@ -67,7 +67,8 @@ def export_pdf_layout_to_json(
         "pages": [],
     }
 
-    for page_index, page in enumerate(doc):
+    for page_index in range(doc.page_count):
+        page = doc[page_index]
         page_rect = page.rect
         page_info: dict[str, Any] = {
             "page_index": page_index,

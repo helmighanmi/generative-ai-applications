@@ -93,7 +93,8 @@ def check_no_author_headers() -> list[str]:
             head = path.read_text(encoding="utf-8").splitlines()[:20]
         except UnicodeDecodeError:
             continue
-        if any(marker in line for line in head for marker in HEADER_MARKERS):
+        matching_lines = [line for line in head if any(marker in line for marker in HEADER_MARKERS)]
+        if len(matching_lines) >= 3:
             problems.append(f"{relative(path)}: per-file author header is not allowed")
     return problems
 

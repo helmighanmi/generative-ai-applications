@@ -104,8 +104,10 @@ class GeneratorService:
             return resp.choices[0].message.content
 
         if provider == "huggingface":
+            if self._hf_pipeline is None:
+                raise RuntimeError("Hugging Face pipeline is not configured")
             # text-generation pipeline returns a list of dicts with 'generated_text'
-            outs = self._hf_pipeline(  # type: ignore[operator]
+            outs = self._hf_pipeline(
                 prompt,
                 max_new_tokens=self.max_tokens,
                 temperature=self.temperature,
