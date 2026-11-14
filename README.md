@@ -82,7 +82,7 @@ Pull requests are expected to pass:
 
 - Python syntax compilation
 - Ruff lint and formatting checks (pinned `ruff==0.17.4`)
-- project unit tests for all five projects
+- unit tests for all four projects and the lab
 - cross-process integration tests (`integration-smoke`, including FAISS build -> save -> reload -> retrieval)
 - dependency metadata validation (`pip check`)
 - dependency auditing for every project (Linux CI is authoritative)
@@ -91,7 +91,7 @@ Pull requests are expected to pass:
 - CodeQL security analysis
 
 CI never converts a failing test into a successful build. Audit exceptions must follow
-[`docs/security-audit-policy.md`](docs/security-audit-policy.md), including an owner and expiry date.
+[`docs/operations/security-audit-policy.md`](docs/operations/security-audit-policy.md), including an owner and expiry date.
 
 ## Public repository / secrets policy
 
@@ -101,13 +101,13 @@ The example values in this repository are placeholders only.
 
 ## Documentation
 
-- [`docs/architecture.md`](docs/architecture.md) — monorepo architecture and boundaries
-- [`docs/development.md`](docs/development.md) — local development workflow
-- [`docs/testing.md`](docs/testing.md) — software tests vs AI evaluation
-- [`docs/security.md`](docs/security.md) — public-repository security practices
-- [`docs/security-audit-policy.md`](docs/security-audit-policy.md) — dependency audit exceptions and expiry
-- [`docs/runbook.md`](docs/runbook.md) — operational checks and troubleshooting
+Start with [`docs/README.md`](docs/README.md). The short version:
+
+- [`docs/architecture/`](docs/architecture/) — system shape and repository layout rules
 - [`docs/decisions/`](docs/decisions/) — architecture decision records (ADRs)
+- [`docs/guides/`](docs/guides/) — development, testing and evaluation
+- [`docs/operations/`](docs/operations/) — runbook, security notes, audit policy
+- [`docs/history/`](docs/history/) — past plans and reviews, kept for context
 
 ## Author
 

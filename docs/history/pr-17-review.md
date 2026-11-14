@@ -29,7 +29,7 @@ correctly, and both the Dockerfile and Compose use `/ready`.
    `huggingface-hub` live in the `ai` extra. The matrix now carries a per-entry `install`
    field and the project audits `.[ai]`.
 2. **`.[dev]` no longer installs the AI stack, but the README said it did.** The project
-   README and [`docs/runbook.md`](../runbook.md) now document `pip install -e '.[dev,ai]'`
+   README and [`docs/runbook.md`](../operations/runbook.md) now document `pip install -e '.[dev,ai]'`
    for real-provider use.
 3. **`integration-smoke` duplicated `project-tests (multimodal-rag-pipeline)`.** The job now
    installs `.[ai,dev]` and asserts that `openai`, `sentence_transformers`, `torch` and
@@ -58,6 +58,6 @@ These were raised in review and deliberately left out of the PR:
 
 ## Dependency audit policy
 
-Any exception must follow [`docs/security-audit-policy.md`](../security-audit-policy.md): an
+Any exception must follow [`docs/security-audit-policy.md`](../operations/security-audit-policy.md): an
 owner, a reason, a mitigation and an expiry date of at most 90 days. No blanket ignores and no
 `continue-on-error`.
