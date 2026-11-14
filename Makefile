@@ -19,16 +19,16 @@ install:
 	$(PYTHON) -m pip install -e '.[dev]'
 
 lint:
-	ruff check projects scripts
+	ruff check projects labs scripts
 
 format:
-	ruff format projects scripts
+	ruff format projects labs scripts
 
 format-check:
-	ruff format --check projects scripts
+	ruff format --check projects labs scripts
 
 compile:
-	$(PYTHON) -m compileall -q projects scripts
+	$(PYTHON) -m compileall -q projects labs scripts
 
 check: lint format-check compile
 	$(PYTHON) scripts/check_docs_links.py

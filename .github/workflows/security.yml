@@ -35,19 +35,16 @@ jobs:
           - project: document-parsing
             package: pdf-page-classifier
             install: "."
-          - project: langchain
-            package: langchain-foundations
-            install: "."
           - project: multimodal-rag-pipeline
             package: multimodal-rag-pipeline
             # The provider stack lives in the `ai` extra; without it the
             # transformers/torch/openai advisories are never resolved.
             install: ".[ai]"
-          - project: pplx-embed-project
+          - project: pplx-embed
             package: pplx-embed
             install: "."
-          - project: rag-qa-bot-langchain
-            package: rag-qa-bot-langchain
+          - project: rag-qa-bot
+            package: rag-qa-bot
             install: "."
     defaults:
       run:

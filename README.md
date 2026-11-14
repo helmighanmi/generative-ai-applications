@@ -33,13 +33,20 @@ Logging, health checks, runbooks
 
 ## Repository map
 
+`projects/` contains code that is installed, tested, and run:
+
 | Project | Focus | Primary engineering signal |
 |---|---|---|
 | [`projects/document-parsing`](projects/document-parsing/) | PDF page classification | Applied ML + deterministic heuristics + calibration |
-| [`projects/langchain`](projects/langchain/) | LangChain foundations | Framework experiments kept isolated from production services |
 | [`projects/multimodal-rag-pipeline`](projects/multimodal-rag-pipeline/) | Multimodal PDF RAG | Provider abstraction, FAISS retrieval, configurable pipeline |
-| [`projects/pplx-embed-project`](projects/pplx-embed-project/) | Local embedding API + UI | FastAPI, Streamlit, Docker Compose, health checks |
-| [`projects/rag-qa-bot-langchain`](projects/rag-qa-bot-langchain/) | PDF QA / RAG | Retrieval pipeline with modern LangChain package boundaries |
+| [`projects/pplx-embed`](projects/pplx-embed/) | Local embedding API + UI | FastAPI, Streamlit, Docker Compose, health checks |
+| [`projects/rag-qa-bot`](projects/rag-qa-bot/) | PDF QA / RAG | Retrieval pipeline with modern LangChain package boundaries |
+
+`labs/` contains exploratory notebooks. Labs are read, not imported: no project depends on them.
+
+| Lab | Focus |
+|---|---|
+| [`labs/langchain-foundations`](labs/langchain-foundations/) | LangChain document loading and framework notes |
 
 Cross-cutting engineering material lives in [`docs/`](docs/), root automation in [`Makefile`](Makefile), and GitHub automation in [`.github/workflows`](.github/workflows/).
 

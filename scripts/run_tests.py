@@ -10,10 +10,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 PROJECTS = [
     ROOT / "projects" / "document-parsing",
-    ROOT / "projects" / "langchain",
     ROOT / "projects" / "multimodal-rag-pipeline",
-    ROOT / "projects" / "pplx-embed-project",
-    ROOT / "projects" / "rag-qa-bot-langchain",
+    ROOT / "projects" / "pplx-embed",
+    ROOT / "projects" / "rag-qa-bot",
+    ROOT / "labs" / "langchain-foundations",
 ]
 
 

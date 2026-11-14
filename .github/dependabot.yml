@@ -28,10 +28,9 @@ updates:
     directories:
       - "/"
       - "/projects/document-parsing"
-      - "/projects/langchain"
       - "/projects/multimodal-rag-pipeline"
-      - "/projects/pplx-embed-project"
-      - "/projects/rag-qa-bot-langchain"
+      - "/projects/pplx-embed"
+      - "/projects/rag-qa-bot"
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 2

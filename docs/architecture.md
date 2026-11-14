@@ -7,16 +7,19 @@ This repository is a portfolio of independent AI systems and experiments. The ro
 ```text
 repository
 ├── .github/workflows/      CI and security automation
-├── docs/                   architecture, ADRs, runbooks
-├── evals/                  cross-project evaluation conventions
-├── projects/
+├── docs/                   architecture, ADRs, guides, runbooks
+├── projects/               installed, tested, runnable
 │   ├── document-parsing/   applied document intelligence
-│   ├── langchain/          framework exploration
 │   ├── multimodal-rag-pipeline/
-│   ├── pplx-embed-project/
-│   └── rag-qa-bot-langchain/
+│   ├── pplx-embed/
+│   └── rag-qa-bot/
+├── labs/                   exploratory notebooks, never imported
+│   └── langchain-foundations/
 └── scripts/                repository-level automation
 ```
+
+The distinction matters: `projects/` code is installed, tested, and run; `labs/` code is read.
+A lab that becomes load-bearing graduates into `projects/` with a package, tests, and a run command.
 
 ## Design principles
 

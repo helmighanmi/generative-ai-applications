@@ -31,11 +31,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install 'ruff==0.17.4' 'pytest>=8.3,<9'
       - name: Compile Python source
-        run: python -m compileall -q projects scripts
+        run: python -m compileall -q projects labs scripts
       - name: Ruff lint
-        run: ruff check projects scripts
+        run: ruff check projects labs scripts
       - name: Ruff format check
-        run: ruff format --check projects scripts
+        run: ruff format --check projects labs scripts
       - name: Markdown link check
         run: python scripts/check_docs_links.py
 
@@ -48,13 +48,11 @@ jobs:
         include:
           - project: document-parsing
             install: "pip install -e '.[dev]'"
-          - project: langchain
-            install: "pip install -e '.[dev]'"
           - project: multimodal-rag-pipeline
             install: "pip install -e '.[dev]'"
-          - project: pplx-embed-project
+          - project: pplx-embed
             install: "pip install -e '.[dev]'"
-          - project: rag-qa-bot-langchain
+          - project: rag-qa-bot
             install: "pip install -e '.[dev]'"
     defaults:
       run:
@@ -106,11 +104,11 @@ jobs:
             context: projects/multimodal-rag-pipeline
             dockerfile: projects/multimodal-rag-pipeline/Dockerfile
           - name: pplx-api
-            context: projects/pplx-embed-project
-            dockerfile: projects/pplx-embed-project/docker/Dockerfile.api
+            context: projects/pplx-embed
+            dockerfile: projects/pplx-embed/docker/Dockerfile.api
           - name: pplx-ui
-            context: projects/pplx-embed-project
-            dockerfile: projects/pplx-embed-project/docker/Dockerfile.streamlit
+            context: projects/pplx-embed
+            dockerfile: projects/pplx-embed/docker/Dockerfile.streamlit
     steps:
       - uses: actions/checkout@v7
       - name: Build ${{ matrix.name }}
