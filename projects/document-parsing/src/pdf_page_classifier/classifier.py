@@ -1,9 +1,3 @@
-# Path: projects/document-parsing/src/pdf_page_classifier/classifier.py
-# Author: GHANMI Helmi
-# Current Role: AI Engineer
-# Past Role: Researcher in Applied Mathematics
-# Research Profile: https://www.researchgate.net/profile/Ghanmi-Helmi
-
 """Classify PDF pages as document-like or diagram-like.
 
 The module keeps the original interpretable heuristic approach and an adaptive

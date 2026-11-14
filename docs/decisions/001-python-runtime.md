@@ -1,11 +1,3 @@
-<!--
-Path: docs/decisions/001-python-runtime.md
-Author: GHANMI Helmi
-Current Role: AI Engineer
-Past Role: Researcher in Applied Mathematics
-Research Profile: https://www.researchgate.net/profile/Ghanmi-Helmi
--->
-
 # ADR-001: Python 3.11 Baseline
 
 **Status:** Accepted

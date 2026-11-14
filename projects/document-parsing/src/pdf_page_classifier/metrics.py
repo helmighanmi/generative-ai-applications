@@ -1,9 +1,3 @@
-# Path: projects/document-parsing/src/pdf_page_classifier/metrics.py
-# Author: GHANMI Helmi
-# Current Role: AI Engineer
-# Past Role: Researcher in Applied Mathematics
-# Research Profile: https://www.researchgate.net/profile/Ghanmi-Helmi
-
 """Classification metrics for offline evaluation.
 
 The helpers in this module are intentionally small and free of project-specific

@@ -1,9 +1,3 @@
-# Path: projects/multimodal-rag-pipeline/src/multimodal_rag/rag.py
-# Author: GHANMI Helmi
-# Current Role: AI Engineer
-# Past Role: Researcher in Applied Mathematics
-# Research Profile: https://www.researchgate.net/profile/Ghanmi-Helmi
-
 """Retrieval and generation orchestration."""
 
 from __future__ import annotations

@@ -1,11 +1,3 @@
-<!--
-Path: projects/document-parsing/evals/README.md
-Author: GHANMI Helmi
-Current Role: AI Engineer
-Past Role: Researcher in Applied Mathematics
-Research Profile: https://www.researchgate.net/profile/Ghanmi-Helmi
--->
-
 # Page classification evaluation
 
 This directory holds the offline evaluation for `pdf-page-classifier`: a small

@@ -1,9 +1,3 @@
-# Path: projects/multimodal-rag-pipeline/config/config.yaml
-# Author: GHANMI Helmi
-# Current Role: AI Engineer
-# Past Role: Researcher in Applied Mathematics
-# Research Profile: https://www.researchgate.net/profile/Ghanmi-Helmi
-
 model:
   embedding:
     # Stub is the safe reproducible default. Override with RAG_EMBEDDING_PROVIDER.

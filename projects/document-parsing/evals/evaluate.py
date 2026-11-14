@@ -1,9 +1,3 @@
-# Path: projects/document-parsing/evals/evaluate.py
-# Author: GHANMI Helmi
-# Current Role: AI Engineer
-# Past Role: Researcher in Applied Mathematics
-# Research Profile: https://www.researchgate.net/profile/Ghanmi-Helmi
-
 """Offline evaluation for the PDF page classifier.
 
 The script builds deterministic synthetic fixtures, reads the curated PDFs from

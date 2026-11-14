@@ -1,8 +1,2 @@
-# Path: .gitattributes
-# Author: GHANMI Helmi
-# Current Role: AI Engineer
-# Past Role: Researcher in Applied Mathematics
-# Research Profile: https://www.researchgate.net/profile/Ghanmi-Helmi
-
 # PDF fixtures are binary: do not diff them as text or check them for whitespace.
 *.pdf binary

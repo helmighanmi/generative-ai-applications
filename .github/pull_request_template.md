@@ -1,11 +1,3 @@
-<!--
-Path: .github/pull_request_template.md
-Author: GHANMI Helmi
-Current Role: AI Engineer
-Past Role: Researcher in Applied Mathematics
-Research Profile: https://www.researchgate.net/profile/Ghanmi-Helmi
--->
-
 ## Problem
 
 What problem does this change solve?
@@ -19,7 +11,7 @@ Why this approach? What alternatives were considered?
 - [ ] Unit/integration tests updated
 - [ ] `make check` passes
 - [ ] `make test` passes
-- [ ] Dependency audit passes, or an exception follows `docs/security-audit-policy.md`
+- [ ] Dependency audit passes, or an exception follows `docs/operations/security-audit-policy.md`
 - [ ] No secrets, model weights, or private data added
 - [ ] Documentation/ADR updated when architecture or operations changed
 

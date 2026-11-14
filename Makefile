@@ -1,12 +1,6 @@
-# Path: Makefile
-# Author: GHANMI Helmi
-# Current Role: AI Engineer
-# Past Role: Researcher in Applied Mathematics
-# Research Profile: https://www.researchgate.net/profile/Ghanmi-Helmi
-
 PYTHON ?= python
 
-.PHONY: help install lint format format-check compile check test eval-doc-parsing security clean
+.PHONY: help install lint format format-check compile typecheck check test eval-doc-parsing security clean
 
 help:
 	@echo "Repository commands:"
@@ -15,6 +9,7 @@ help:
 	@echo "  make format        Apply Ruff formatting"
 	@echo "  make format-check  Verify Ruff formatting"
 	@echo "  make compile       Compile all Python source for syntax errors"
+	@echo "  make typecheck     Type-check project source with mypy"
 	@echo "  make check         Run every static quality gate used by CI"
 	@echo "  make test          Run lightweight project tests"
 	@echo "  make eval-doc-parsing  Run the page-classification evaluation"
@@ -23,20 +18,29 @@ help:
 
 install:
 	$(PYTHON) -m pip install -e '.[dev]'
+	@for dir in projects/*/; do \
+		project="$${dir%/}"; \
+		echo "Installing $$project"; \
+		$(PYTHON) -m pip install -e "$$project[dev]" || exit 1; \
+	done
 
 lint:
-	ruff check projects scripts
+	ruff check projects labs scripts
 
 format:
-	ruff format projects scripts
+	ruff format projects labs scripts
 
 format-check:
-	ruff format --check projects scripts
+	ruff format --check projects labs scripts
 
 compile:
-	$(PYTHON) -m compileall -q projects scripts
+	$(PYTHON) -m compileall -q projects labs scripts
 
-check: lint format-check compile
+typecheck:
+	$(PYTHON) -m mypy projects/*/src
+
+check: lint format-check compile typecheck
+	$(PYTHON) scripts/check_structure.py
 	$(PYTHON) scripts/check_docs_links.py
 
 test:

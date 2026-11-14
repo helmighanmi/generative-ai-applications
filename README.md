@@ -1,11 +1,3 @@
-<!--
-Path: README.md
-Author: GHANMI Helmi
-Current Role: AI Engineer
-Past Role: Researcher in Applied Mathematics
-Research Profile: https://www.researchgate.net/profile/Ghanmi-Helmi
--->
-
 # Generative AI Applications — Engineering Portfolio
 
 Production-minded AI engineering monorepo covering document intelligence, retrieval-augmented generation (RAG), local embedding services, multimodal retrieval, testing, containerization, CI/CD, and operational practices.
@@ -41,13 +33,20 @@ Logging, health checks, runbooks
 
 ## Repository map
 
+`projects/` contains code that is installed, tested, and run:
+
 | Project | Focus | Primary engineering signal |
 |---|---|---|
 | [`projects/document-parsing`](projects/document-parsing/) | PDF page classification | Applied ML + deterministic heuristics + calibration |
-| [`projects/langchain`](projects/langchain/) | LangChain foundations | Framework experiments kept isolated from production services |
 | [`projects/multimodal-rag-pipeline`](projects/multimodal-rag-pipeline/) | Multimodal PDF RAG | Provider abstraction, FAISS retrieval, configurable pipeline |
-| [`projects/pplx-embed-project`](projects/pplx-embed-project/) | Local embedding API + UI | FastAPI, Streamlit, Docker Compose, health checks |
-| [`projects/rag-qa-bot-langchain`](projects/rag-qa-bot-langchain/) | PDF QA / RAG | Retrieval pipeline with modern LangChain package boundaries |
+| [`projects/pplx-embed`](projects/pplx-embed/) | Local embedding API + UI | FastAPI, Streamlit, Docker Compose, health checks |
+| [`projects/rag-qa-bot`](projects/rag-qa-bot/) | PDF QA / RAG | Retrieval pipeline with modern LangChain package boundaries |
+
+`labs/` contains exploratory notebooks. Labs are read, not imported: no project depends on them.
+
+| Lab | Focus |
+|---|---|
+| [`labs/langchain-foundations`](labs/langchain-foundations/) | LangChain document loading and framework notes |
 
 Cross-cutting engineering material lives in [`docs/`](docs/), root automation in [`Makefile`](Makefile), and GitHub automation in [`.github/workflows`](.github/workflows/).
 
@@ -60,11 +59,11 @@ See [`docs/decisions/001-python-runtime.md`](docs/decisions/001-python-runtime.m
 ## Quick start
 
 ```bash
-# Create a root development environment for repository tooling
+# Create a root environment with tooling and every project in editable mode
 python3.11 -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
-pip install -e '.[dev]'
+make install
 
 # Repository-wide static checks
 make lint
@@ -75,7 +74,10 @@ make compile
 make test
 ```
 
-Each subproject has its own installation and run instructions because their runtime dependency sets differ significantly.
+The root `pyproject.toml` installs tooling only. `make install` also installs each
+project from its own `pyproject.toml`, so the root environment never duplicates
+runtime dependency pins. Each subproject still has its own run instructions
+because their runtime dependency sets differ significantly.
 
 ## Quality gates
 
@@ -83,7 +85,9 @@ Pull requests are expected to pass:
 
 - Python syntax compilation
 - Ruff lint and formatting checks (pinned `ruff==0.17.4`)
-- project unit tests for all five projects
+- mypy type checking on project source
+- repository structure guard (project skeleton, no dependency duplicates, no author headers)
+- unit tests for all four projects and the lab
 - cross-process integration tests (`integration-smoke`, including FAISS build -> save -> reload -> retrieval)
 - dependency metadata validation (`pip check`)
 - dependency auditing for every project (Linux CI is authoritative)
@@ -92,7 +96,7 @@ Pull requests are expected to pass:
 - CodeQL security analysis
 
 CI never converts a failing test into a successful build. Audit exceptions must follow
-[`docs/security-audit-policy.md`](docs/security-audit-policy.md), including an owner and expiry date.
+[`docs/operations/security-audit-policy.md`](docs/operations/security-audit-policy.md), including an owner and expiry date.
 
 ## Public repository / secrets policy
 
@@ -102,13 +106,13 @@ The example values in this repository are placeholders only.
 
 ## Documentation
 
-- [`docs/architecture.md`](docs/architecture.md) — monorepo architecture and boundaries
-- [`docs/development.md`](docs/development.md) — local development workflow
-- [`docs/testing.md`](docs/testing.md) — software tests vs AI evaluation
-- [`docs/security.md`](docs/security.md) — public-repository security practices
-- [`docs/security-audit-policy.md`](docs/security-audit-policy.md) — dependency audit exceptions and expiry
-- [`docs/runbook.md`](docs/runbook.md) — operational checks and troubleshooting
+Start with [`docs/README.md`](docs/README.md). The short version:
+
+- [`docs/architecture/`](docs/architecture/) — system shape and repository layout rules
 - [`docs/decisions/`](docs/decisions/) — architecture decision records (ADRs)
+- [`docs/guides/`](docs/guides/) — development, testing and evaluation
+- [`docs/operations/`](docs/operations/) — runbook, security notes, audit policy
+- [`docs/history/`](docs/history/) — past plans and reviews, kept for context
 
 ## Author
 

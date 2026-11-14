@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=75", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rag-qa-bot"
+version = "1.0.0"
+description = "PDF retrieval-augmented QA with modern LangChain package boundaries"
+requires-python = ">=3.11,<3.12"
+authors = [{name = "GHANMI Helmi"}]
+license = "MIT"
+dependencies = [
+  "pypdf>=5,<7",
+  "faiss-cpu>=1.8,<2",
+  "sentence-transformers>=6.2,<7",
+  "huggingface-hub>=1.31,<3",
+  "langchain-community>=0.3,<2",
+  "langchain-text-splitters>=0.3,<2",
+  "langchain-huggingface>=0.2,<2",
+]
+
+[project.scripts]
+rag-qa = "rag_qa_bot.qa_bot:main"
+
+[project.optional-dependencies]
+dev = ["pytest>=8.3,<10", "ruff==0.17.4"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

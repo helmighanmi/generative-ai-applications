@@ -1,11 +1,3 @@
-<!--
-Path: projects/document-parsing/README.md
-Author: GHANMI Helmi
-Current Role: AI Engineer
-Past Role: Researcher in Applied Mathematics
-Research Profile: https://www.researchgate.net/profile/Ghanmi-Helmi
--->
-
 # PDF Page Classifier
 
 Applied document-intelligence project that classifies PDF pages as **document-like** or **diagram-like** using interpretable geometric/visual heuristics plus an adaptive unsupervised calibration layer.
