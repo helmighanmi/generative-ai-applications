@@ -11,15 +11,11 @@ from pathlib import Path
 
 import numpy as np
 
+from pplx_embed.paths import model_cache_dir
+
 logger = logging.getLogger(__name__)
 
 MODEL_NAME = os.getenv("MODEL_NAME", "perplexity-ai/pplx-embed-v1-0.6b")
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
-
-
-def model_cache_dir() -> Path:
-    """Return the single model-cache location used by local and Docker runtimes."""
-    return Path(os.getenv("MODEL_CACHE_DIR", str(PROJECT_ROOT / "model"))).expanduser().resolve()
 
 
 def ensure_model_available(path: Path) -> None:
@@ -28,8 +24,7 @@ def ensure_model_available(path: Path) -> None:
         return
     if os.getenv("MODEL_AUTO_DOWNLOAD", "false").lower() not in {"1", "true", "yes"}:
         raise FileNotFoundError(
-            f"Model not found at {path}. Run `python scripts/download_model.py` or set "
-            "MODEL_AUTO_DOWNLOAD=true."
+            f"Model not found at {path}. Run `pplx-embed-download` or set MODEL_AUTO_DOWNLOAD=true."
         )
 
     from huggingface_hub import snapshot_download

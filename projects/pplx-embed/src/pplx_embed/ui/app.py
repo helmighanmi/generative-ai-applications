@@ -5,7 +5,6 @@ Connects to the FastAPI backend running on localhost:8000.
 
 import json
 import os
-import sys
 import tempfile
 from pathlib import Path
 
@@ -14,10 +13,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 import requests
 import streamlit as st
-
-# Make scripts importable
-sys.path.insert(0, str(Path(__file__).parent.parent))
-from scripts.export_projector import EmbeddingProjector
+from pplx_embed.scripts.export_projector import EmbeddingProjector
 
 # ─── Config ─────────────────────────────────────────────────────────────────
 

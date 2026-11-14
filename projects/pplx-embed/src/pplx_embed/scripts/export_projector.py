@@ -15,11 +15,11 @@ Features:
   - Works both as a CLI tool and as an imported module
 
 CLI usage:
-  python scripts/export_projector.py --input embeddings.json --method umap --output projector.html
-  python scripts/export_projector.py --demo                              # run on built-in demo data
+  pplx-embed-projector --input embeddings.json --method umap --output projector.html
+  pplx-embed-projector --demo                              # run on built-in demo data
 
 Module usage:
-  from scripts.export_projector import EmbeddingProjector
+  from pplx_embed.scripts.export_projector import EmbeddingProjector
   proj = EmbeddingProjector(embeddings, labels=texts)
   proj.plot(method="umap").write_html("out.html")
 """

@@ -1,2 +1,0 @@
-# Prefer `pip install -e .` so pyproject.toml remains the dependency source of truth.
--e .

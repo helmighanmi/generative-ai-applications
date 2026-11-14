@@ -146,7 +146,7 @@ cmd_api() {
     log "API will be available at http://localhost:8000"
     log "Press Ctrl+C to stop."
     cd "$SCRIPT_DIR"
-    uvicorn api.main:app --host 0.0.0.0 --port 8000 --reload
+    uvicorn pplx_embed.api.main:app --host 0.0.0.0 --port 8000 --reload
 }
 
 cmd_ui() {
@@ -158,7 +158,7 @@ cmd_ui() {
     cd "$SCRIPT_DIR"
     # When running locally, point to localhost API
     export API_URL="${API_URL:-http://localhost:8000}"
-    streamlit run streamlit_app/app.py \
+    streamlit run src/pplx_embed/ui/app.py \
         --server.port 8501 \
         --server.address 0.0.0.0 \
         --browser.gatherUsageStats false
@@ -173,7 +173,7 @@ cmd_all() {
     export API_URL="http://localhost:8000"
 
     log "Starting API on port 8000..."
-    uvicorn api.main:app --host 0.0.0.0 --port 8000 &
+    uvicorn pplx_embed.api.main:app --host 0.0.0.0 --port 8000 &
     API_PID=$!
     echo "$API_PID" > "$PID_FILE"
 
@@ -188,7 +188,7 @@ cmd_all() {
     done
 
     log "Starting Streamlit on port 8501..."
-    streamlit run streamlit_app/app.py \
+    streamlit run src/pplx_embed/ui/app.py \
         --server.port 8501 \
         --server.address 0.0.0.0 \
         --browser.gatherUsageStats false &
@@ -247,7 +247,7 @@ cmd_download() {
     activate_venv
     header "Downloading model weights"
     cd "$SCRIPT_DIR"
-    python scripts/download_model.py
+    pplx-embed-download
 }
 
 cmd_projector() {
@@ -255,7 +255,7 @@ cmd_projector() {
     activate_venv
     header "Exporting embedding projector to HTML"
     cd "$SCRIPT_DIR"
-    python scripts/export_projector.py "$@"
+    pplx-embed-projector "$@"
 }
 
 cmd_help() {

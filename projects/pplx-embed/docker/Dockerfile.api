@@ -10,9 +10,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends curl \
     && useradd --create-home --uid 10001 appuser
 
 WORKDIR /app
-COPY api/requirements.txt /tmp/requirements.txt
-RUN python -m pip install --upgrade pip && pip install -r /tmp/requirements.txt
-COPY api ./api
+COPY pyproject.toml README.md ./
+COPY src ./src
+RUN python -m pip install --upgrade pip && pip install .
 
 RUN mkdir -p /model && chown -R appuser:appuser /app /model
 USER appuser
@@ -21,4 +21,4 @@ EXPOSE 8000
 HEALTHCHECK --interval=30s --timeout=5s --start-period=120s --retries=5 \
   CMD curl --fail http://localhost:8000/ready || exit 1
 
-CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1"]
+CMD ["uvicorn", "pplx_embed.api.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1"]

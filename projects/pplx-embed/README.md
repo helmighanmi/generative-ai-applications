@@ -24,6 +24,20 @@ MODEL_CACHE_DIR  ── persistent Docker volume / local model directory
 pplx-embed-v1-0.6b (CPU)
 ```
 
+## Layout
+
+```text
+src/pplx_embed/
+├── api/        FastAPI app and embedder adapter
+├── ui/         Streamlit exploration UI
+├── scripts/    model download and projector export
+└── paths.py    project and model-cache resolution
+```
+
+`pyproject.toml` is the only dependency declaration. The Docker images install the
+package with `pip install .` and `pip install '.[ui]'`; there are no separate
+requirements files to keep in sync.
+
 ## Engineering decisions
 
 - **Python 3.11** is the supported runtime for deterministic ML dependency compatibility.
@@ -97,7 +111,7 @@ external CDN or font requests.
 To run the API without a model locally or in a container:
 
 ```bash
-EMBEDDER_BACKEND=fake uvicorn api.main:app --reload
+EMBEDDER_BACKEND=fake uvicorn pplx_embed.api.main:app --reload
 curl --fail http://localhost:8000/ready
 curl --fail -X POST http://localhost:8000/embed \
   -H 'Content-Type: application/json' -d '{"texts":["hello"]}'

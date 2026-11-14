@@ -2,9 +2,9 @@ from __future__ import annotations
 
 import numpy as np
 import pytest
-from api.embedder import FakeEmbeddingModel
-from api.main import create_app
 from fastapi.testclient import TestClient
+from pplx_embed.api.embedder import FakeEmbeddingModel
+from pplx_embed.api.main import create_app
 
 
 class FakeEmbedder:

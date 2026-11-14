@@ -68,14 +68,14 @@ test:
 	.venv/bin/pytest tests/ -v --tb=short
 
 lint:
-	.venv/bin/ruff check api/ streamlit_app/ scripts/ tests/
+	.venv/bin/ruff check src/ tests/
 
 format:
-	.venv/bin/ruff format api/ streamlit_app/ scripts/ tests/
-	.venv/bin/ruff check --fix api/ streamlit_app/ scripts/ tests/
+	.venv/bin/ruff format src/ tests/
+	.venv/bin/ruff check --fix src/ tests/
 
 typecheck:
-	.venv/bin/mypy api/ scripts/ --ignore-missing-imports
+	.venv/bin/mypy src/ --ignore-missing-imports
 
 projector:
 	./launch.sh projector --demo --output projector_demo.html

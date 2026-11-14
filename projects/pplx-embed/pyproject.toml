@@ -36,9 +36,13 @@ dev = [
   "pre-commit>=4,<5",
 ]
 
+[project.scripts]
+pplx-embed-download = "pplx_embed.scripts.download_model:main"
+pplx-embed-projector = "pplx_embed.scripts.export_projector:main"
+
 [tool.setuptools.packages.find]
-include = ["api*", "streamlit_app*", "scripts*"]
+where = ["src"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-pythonpath = ["."]
+pythonpath = ["src"]

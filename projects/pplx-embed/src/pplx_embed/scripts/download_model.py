@@ -3,13 +3,13 @@
 from __future__ import annotations
 
 import os
-from pathlib import Path
 
 from huggingface_hub import snapshot_download
 
+from pplx_embed.paths import model_cache_dir
+
 MODEL_NAME = os.getenv("MODEL_NAME", "perplexity-ai/pplx-embed-v1-0.6b")
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
-SAVE_DIR = Path(os.getenv("MODEL_CACHE_DIR", str(PROJECT_ROOT / "model"))).expanduser().resolve()
+SAVE_DIR = model_cache_dir()
 
 
 def main() -> int:

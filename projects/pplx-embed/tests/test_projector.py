@@ -5,7 +5,7 @@ from pathlib import Path
 import numpy as np
 import plotly.graph_objects as go
 import pytest
-from scripts.export_projector import EmbeddingProjector
+from pplx_embed.scripts.export_projector import EmbeddingProjector
 
 
 def test_projector_pca_returns_expected_shape() -> None:
