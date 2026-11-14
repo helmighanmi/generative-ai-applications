@@ -13,9 +13,15 @@ SKIP_PREFIXES = ("http://", "https://", "mailto:", "tel:", "#")
 
 
 def markdown_files() -> list[Path]:
-    files = [ROOT / "README.md", ROOT / "CHANGELOG.md", ROOT / "SECURITY.md"]
+    files = [
+        ROOT / "README.md",
+        ROOT / "CHANGELOG.md",
+        ROOT / "SECURITY.md",
+        ROOT / "CONTRIBUTING.md",
+    ]
     files.extend(sorted((ROOT / "docs").rglob("*.md")))
-    files.extend(sorted((ROOT / "projects").glob("*/README.md")))
+    files.extend(sorted((ROOT / "projects").rglob("*.md")))
+    files.extend(sorted((ROOT / "labs").rglob("*.md")))
     return [path for path in files if path.is_file()]
 
 

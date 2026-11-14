@@ -36,24 +36,27 @@ jobs:
         run: ruff check projects labs scripts
       - name: Ruff format check
         run: ruff format --check projects labs scripts
+      - name: Repository structure check
+        run: python scripts/check_structure.py
       - name: Markdown link check
         run: python scripts/check_docs_links.py
 
+  detect-projects:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.matrix.outputs.value }}
+    steps:
+      - uses: actions/checkout@v7
+      - id: matrix
+        run: echo "value=$(python3 scripts/project_matrix.py)" >> "$GITHUB_OUTPUT"
+
   project-tests:
+    needs: detect-projects
     runs-on: ubuntu-latest
     timeout-minutes: 30
     strategy:
       fail-fast: false
-      matrix:
-        include:
-          - project: document-parsing
-            install: "pip install -e '.[dev]'"
-          - project: multimodal-rag-pipeline
-            install: "pip install -e '.[dev]'"
-          - project: pplx-embed
-            install: "pip install -e '.[dev]'"
-          - project: rag-qa-bot
-            install: "pip install -e '.[dev]'"
+      matrix: ${{ fromJSON(needs.detect-projects.outputs.matrix) }}
     defaults:
       run:
         working-directory: projects/${{ matrix.project }}
@@ -66,10 +69,26 @@ jobs:
       - name: Install project
         run: |
           python -m pip install --upgrade pip
-          ${{ matrix.install }}
+          pip install -e '.[dev]'
           pip check
       - name: Run tests
         run: python -m pytest -q
+
+  lab-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+      - name: Install test runner
+        run: |
+          python -m pip install --upgrade pip
+          pip install 'pytest>=8.3,<10'
+      - name: Run lab tests
+        run: python scripts/run_tests.py --group labs
 
   integration-smoke:
     runs-on: ubuntu-latest

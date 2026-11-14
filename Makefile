@@ -36,6 +36,7 @@ compile:
 	$(PYTHON) -m compileall -q projects labs scripts
 
 check: lint format-check compile
+	$(PYTHON) scripts/check_structure.py
 	$(PYTHON) scripts/check_docs_links.py
 
 test:

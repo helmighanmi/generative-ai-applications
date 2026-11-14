@@ -25,27 +25,22 @@ jobs:
           languages: python
       - uses: github/codeql-action/analyze@v4
 
+  detect-projects:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.matrix.outputs.value }}
+    steps:
+      - uses: actions/checkout@v7
+      - id: matrix
+        run: echo "value=$(python3 scripts/project_matrix.py)" >> "$GITHUB_OUTPUT"
+
   dependency-audit:
+    needs: detect-projects
     runs-on: ubuntu-latest
     timeout-minutes: 30
     strategy:
       fail-fast: false
-      matrix:
-        include:
-          - project: document-parsing
-            package: pdf-page-classifier
-            install: "."
-          - project: multimodal-rag-pipeline
-            package: multimodal-rag-pipeline
-            # The provider stack lives in the `ai` extra; without it the
-            # transformers/torch/openai advisories are never resolved.
-            install: ".[ai]"
-          - project: pplx-embed
-            package: pplx-embed
-            install: "."
-          - project: rag-qa-bot
-            package: rag-qa-bot
-            install: "."
+      matrix: ${{ fromJSON(needs.detect-projects.outputs.matrix) }}
     defaults:
       run:
         working-directory: projects/${{ matrix.project }}
@@ -61,7 +56,7 @@ jobs:
           source "$RUNNER_TEMP/audit/bin/activate"
           python -m pip install --upgrade pip setuptools wheel
           pip install 'pip-audit==2.10.1'
-          pip install "${{ matrix.install }}"
+          pip install "${{ matrix.audit }}"
           pip check
           pip freeze --exclude "${{ matrix.package }}" > "$RUNNER_TEMP/requirements.txt"
           pip-audit --strict -r "$RUNNER_TEMP/requirements.txt"
