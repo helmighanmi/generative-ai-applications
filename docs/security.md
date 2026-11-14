@@ -1,11 +1,3 @@
-<!--
-Path: docs/security.md
-Author: GHANMI Helmi
-Current Role: AI Engineer
-Past Role: Researcher in Applied Mathematics
-Research Profile: https://www.researchgate.net/profile/Ghanmi-Helmi
--->
-
 # Security Engineering Notes
 
 ## Public-repository controls

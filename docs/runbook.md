@@ -1,11 +1,3 @@
-<!--
-Path: docs/runbook.md
-Author: GHANMI Helmi
-Current Role: AI Engineer
-Past Role: Researcher in Applied Mathematics
-Research Profile: https://www.researchgate.net/profile/Ghanmi-Helmi
--->
-
 # Runbook
 
 Last verified: 2026-11-08 with Python 3.11.

@@ -1,9 +1,3 @@
-# Path: projects/multimodal-rag-pipeline/src/multimodal_rag/cli.py
-# Author: GHANMI Helmi
-# Current Role: AI Engineer
-# Past Role: Researcher in Applied Mathematics
-# Research Profile: https://www.researchgate.net/profile/Ghanmi-Helmi
-
 """CLI for building and querying the multimodal RAG index."""
 
 from __future__ import annotations

@@ -1,11 +1,3 @@
-<!--
-Path: CONTRIBUTING.md
-Author: GHANMI Helmi
-Current Role: AI Engineer
-Past Role: Researcher in Applied Mathematics
-Research Profile: https://www.researchgate.net/profile/Ghanmi-Helmi
--->
-
 # Contributing
 
 Contributions should keep each project independently runnable and should not introduce heavyweight infrastructure without a demonstrated need.

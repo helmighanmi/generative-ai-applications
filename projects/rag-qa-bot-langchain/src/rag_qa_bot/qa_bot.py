@@ -1,9 +1,3 @@
-# Path: projects/rag-qa-bot-langchain/src/rag_qa_bot/qa_bot.py
-# Author: GHANMI Helmi
-# Current Role: AI Engineer
-# Past Role: Researcher in Applied Mathematics
-# Research Profile: https://www.researchgate.net/profile/Ghanmi-Helmi
-
 """PDF retrieval-augmented QA with explicit retriever and LLM boundaries."""
 
 from __future__ import annotations

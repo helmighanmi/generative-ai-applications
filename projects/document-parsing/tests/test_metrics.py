@@ -1,9 +1,3 @@
-# Path: projects/document-parsing/tests/test_metrics.py
-# Author: GHANMI Helmi
-# Current Role: AI Engineer
-# Past Role: Researcher in Applied Mathematics
-# Research Profile: https://www.researchgate.net/profile/Ghanmi-Helmi
-
 from __future__ import annotations
 
 import numpy as np

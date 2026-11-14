@@ -1,11 +1,3 @@
-<!--
-Path: SECURITY.md
-Author: GHANMI Helmi
-Current Role: AI Engineer
-Past Role: Researcher in Applied Mathematics
-Research Profile: https://www.researchgate.net/profile/Ghanmi-Helmi
--->
-
 # Security Policy
 
 Do not open a public issue for a vulnerability that exposes credentials or creates a practical remote-exploitation path. Use GitHub's private vulnerability reporting feature when it is enabled for this repository.

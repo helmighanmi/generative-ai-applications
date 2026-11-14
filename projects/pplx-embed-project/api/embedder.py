@@ -1,9 +1,3 @@
-# Path: projects/pplx-embed-project/api/embedder.py
-# Author: GHANMI Helmi
-# Current Role: AI Engineer
-# Past Role: Researcher in Applied Mathematics
-# Research Profile: https://www.researchgate.net/profile/Ghanmi-Helmi
-
 """Local embedding model adapter for Perplexity's pplx-embed-v1-0.6b."""
 
 from __future__ import annotations

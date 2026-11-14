@@ -1,11 +1,3 @@
-<!--
-Path: .github/pull_request_template.md
-Author: GHANMI Helmi
-Current Role: AI Engineer
-Past Role: Researcher in Applied Mathematics
-Research Profile: https://www.researchgate.net/profile/Ghanmi-Helmi
--->
-
 ## Problem
 
 What problem does this change solve?

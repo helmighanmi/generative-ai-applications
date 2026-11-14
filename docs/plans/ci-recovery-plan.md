@@ -1,11 +1,3 @@
-<!--
-Path: docs/plans/ci-recovery-plan.md
-Author: GHANMI Helmi
-Current Role: AI Engineer
-Past Role: Researcher in Applied Mathematics
-Research Profile: https://www.researchgate.net/profile/Ghanmi-Helmi
--->
-
 # End-to-End Fix Plan: CI Recovery and Runtime Hardening
 
 **Status:** Implemented (2026-11-08)

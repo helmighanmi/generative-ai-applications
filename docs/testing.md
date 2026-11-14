@@ -1,11 +1,3 @@
-<!--
-Path: docs/testing.md
-Author: GHANMI Helmi
-Current Role: AI Engineer
-Past Role: Researcher in Applied Mathematics
-Research Profile: https://www.researchgate.net/profile/Ghanmi-Helmi
--->
-
 # Testing and AI Evaluation
 
 Software testing and AI evaluation answer different questions.

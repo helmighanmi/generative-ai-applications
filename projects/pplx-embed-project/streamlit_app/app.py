@@ -1,9 +1,3 @@
-# Path: projects/pplx-embed-project/streamlit_app/app.py
-# Author: GHANMI Helmi
-# Current Role: AI Engineer
-# Past Role: Researcher in Applied Mathematics
-# Research Profile: https://www.researchgate.net/profile/Ghanmi-Helmi
-
 """
 Streamlit UI for pplx-embed-v1 local embedding service.
 Connects to the FastAPI backend running on localhost:8000.

@@ -1,9 +1,3 @@
-# Path: projects/pplx-embed-project/scripts/download_model.py
-# Author: GHANMI Helmi
-# Current Role: AI Engineer
-# Past Role: Researcher in Applied Mathematics
-# Research Profile: https://www.researchgate.net/profile/Ghanmi-Helmi
-
 """Pre-download the embedding model into MODEL_CACHE_DIR."""
 
 from __future__ import annotations

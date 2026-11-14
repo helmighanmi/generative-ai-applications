@@ -1,9 +1,3 @@
-# Path: scripts/run_tests.py
-# Author: GHANMI Helmi
-# Current Role: AI Engineer
-# Past Role: Researcher in Applied Mathematics
-# Research Profile: https://www.researchgate.net/profile/Ghanmi-Helmi
-
 """Run fast, offline repository tests with project-local import paths."""
 
 from __future__ import annotations

@@ -1,9 +1,3 @@
-# Path: projects/pplx-embed-project/tests/test_dependencies.py
-# Author: GHANMI Helmi
-# Current Role: AI Engineer
-# Past Role: Researcher in Applied Mathematics
-# Research Profile: https://www.researchgate.net/profile/Ghanmi-Helmi
-
 """Keep the Docker requirements file aligned with the packaging metadata."""
 
 from __future__ import annotations

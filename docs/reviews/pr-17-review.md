@@ -1,11 +1,3 @@
-<!--
-Path: docs/reviews/pr-17-review.md
-Author: GHANMI Helmi
-Current Role: AI Engineer
-Past Role: Researcher in Applied Mathematics
-Research Profile: https://www.researchgate.net/profile/Ghanmi-Helmi
--->
-
 # Review record — PR #17, CI and end-to-end recovery
 
 - **PR:** [#17](https://github.com/helmighanmi/generative-ai-applications/pull/17)

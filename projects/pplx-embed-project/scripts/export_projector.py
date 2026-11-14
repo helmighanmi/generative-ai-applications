@@ -1,9 +1,4 @@
 #!/usr/bin/env python3
-# Path: projects/pplx-embed-project/scripts/export_projector.py
-# Author: GHANMI Helmi
-# Current Role: AI Engineer
-# Past Role: Researcher in Applied Mathematics
-# Research Profile: https://www.researchgate.net/profile/Ghanmi-Helmi
 
 """
 Embedding Projector

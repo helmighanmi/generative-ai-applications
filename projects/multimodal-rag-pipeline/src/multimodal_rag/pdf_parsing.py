@@ -1,9 +1,3 @@
-# Path: projects/multimodal-rag-pipeline/src/multimodal_rag/pdf_parsing.py
-# Author: GHANMI Helmi
-# Current Role: AI Engineer
-# Past Role: Researcher in Applied Mathematics
-# Research Profile: https://www.researchgate.net/profile/Ghanmi-Helmi
-
 import json
 from typing import Any
 

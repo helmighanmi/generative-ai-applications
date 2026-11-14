@@ -1,11 +1,3 @@
-<!--
-Path: README.md
-Author: GHANMI Helmi
-Current Role: AI Engineer
-Past Role: Researcher in Applied Mathematics
-Research Profile: https://www.researchgate.net/profile/Ghanmi-Helmi
--->
-
 # Generative AI Applications — Engineering Portfolio
 
 Production-minded AI engineering monorepo covering document intelligence, retrieval-augmented generation (RAG), local embedding services, multimodal retrieval, testing, containerization, CI/CD, and operational practices.

@@ -1,9 +1,3 @@
-# Path: Makefile
-# Author: GHANMI Helmi
-# Current Role: AI Engineer
-# Past Role: Researcher in Applied Mathematics
-# Research Profile: https://www.researchgate.net/profile/Ghanmi-Helmi
-
 PYTHON ?= python
 
 .PHONY: help install lint format format-check compile check test eval-doc-parsing security clean

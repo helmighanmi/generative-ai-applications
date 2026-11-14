@@ -1,9 +1,3 @@
-# Path: projects/pplx-embed-project/api/main.py
-# Author: GHANMI Helmi
-# Current Role: AI Engineer
-# Past Role: Researcher in Applied Mathematics
-# Research Profile: https://www.researchgate.net/profile/Ghanmi-Helmi
-
 """FastAPI service for local text embeddings."""
 
 from __future__ import annotations

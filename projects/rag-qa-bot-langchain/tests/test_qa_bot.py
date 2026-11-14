@@ -1,9 +1,3 @@
-# Path: projects/rag-qa-bot-langchain/tests/test_qa_bot.py
-# Author: GHANMI Helmi
-# Current Role: AI Engineer
-# Past Role: Researcher in Applied Mathematics
-# Research Profile: https://www.researchgate.net/profile/Ghanmi-Helmi
-
 from __future__ import annotations
 
 from dataclasses import dataclass

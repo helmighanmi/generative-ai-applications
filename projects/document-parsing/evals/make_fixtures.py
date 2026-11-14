@@ -1,9 +1,3 @@
-# Path: projects/document-parsing/evals/make_fixtures.py
-# Author: GHANMI Helmi
-# Current Role: AI Engineer
-# Past Role: Researcher in Applied Mathematics
-# Research Profile: https://www.researchgate.net/profile/Ghanmi-Helmi
-
 """Generate deterministic synthetic PDF pages for the evaluation suite.
 
 The generator is the fixture: synthetic PDFs are never committed. Every

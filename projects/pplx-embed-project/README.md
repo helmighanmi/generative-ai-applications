@@ -1,11 +1,3 @@
-<!--
-Path: projects/pplx-embed-project/README.md
-Author: GHANMI Helmi
-Current Role: AI Engineer
-Past Role: Researcher in Applied Mathematics
-Research Profile: https://www.researchgate.net/profile/Ghanmi-Helmi
--->
-
 # pplx-embed — Local Embedding Service
 
 Production-minded local embedding stack around **Perplexity `pplx-embed-v1-0.6b`** with a FastAPI service, Streamlit exploration UI, embedding projector, persistent model cache, Docker Compose, health checks, and offline unit tests.

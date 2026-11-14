@@ -1,11 +1,3 @@
-<!--
-Path: projects/multimodal-rag-pipeline/README.md
-Author: GHANMI Helmi
-Current Role: AI Engineer
-Past Role: Researcher in Applied Mathematics
-Research Profile: https://www.researchgate.net/profile/Ghanmi-Helmi
--->
-
 # Multimodal RAG Pipeline
 
 Configurable PDF retrieval-augmented generation pipeline that extracts text, tables, inline images, and page renders; embeds them; stores aligned metadata in FAISS; retrieves relevant context; and sends it to a pluggable generator.

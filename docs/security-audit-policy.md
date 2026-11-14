@@ -1,11 +1,3 @@
-<!--
-Path: docs/security-audit-policy.md
-Author: GHANMI Helmi
-Current Role: AI Engineer
-Past Role: Researcher in Applied Mathematics
-Research Profile: https://www.researchgate.net/profile/Ghanmi-Helmi
--->
-
 # Dependency Audit Exception Policy
 
 The `Security / dependency-audit` workflow installs each project on Linux and runs

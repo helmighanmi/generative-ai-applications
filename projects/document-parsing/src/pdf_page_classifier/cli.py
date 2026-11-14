@@ -1,9 +1,3 @@
-# Path: projects/document-parsing/src/pdf_page_classifier/cli.py
-# Author: GHANMI Helmi
-# Current Role: AI Engineer
-# Past Role: Researcher in Applied Mathematics
-# Research Profile: https://www.researchgate.net/profile/Ghanmi-Helmi
-
 """Command-line entry point for PDF page classification."""
 
 from __future__ import annotations

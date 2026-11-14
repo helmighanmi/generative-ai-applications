@@ -1,9 +1,3 @@
-# Path: projects/multimodal-rag-pipeline/src/multimodal_rag/vectorstore.py
-# Author: GHANMI Helmi
-# Current Role: AI Engineer
-# Past Role: Researcher in Applied Mathematics
-# Research Profile: https://www.researchgate.net/profile/Ghanmi-Helmi
-
 """FAISS persistence with embedding/metadata alignment guarantees."""
 
 from __future__ import annotations

@@ -1,9 +1,4 @@
 #!/usr/bin/env bash
-# Path: projects/pplx-embed-project/launch.sh
-# Author: GHANMI Helmi
-# Current Role: AI Engineer
-# Past Role: Researcher in Applied Mathematics
-# Research Profile: https://www.researchgate.net/profile/Ghanmi-Helmi
 
 # ═══════════════════════════════════════════════════════════════════════════════
 #  pplx-embed · launch.sh
