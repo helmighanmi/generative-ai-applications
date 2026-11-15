@@ -144,7 +144,7 @@ class EmbeddingProjector:
                 from umap import UMAP  # type: ignore
             except ImportError:
                 print("⚠️  umap-learn not installed → falling back to PCA.")
-                print("   Install it: pip install umap-learn")
+                print("   Install it: pip install 'pplx-embed[umap]'")
                 self._reduced[key] = self._reduce_pca(n_components)
                 return self._reduced[key]
 

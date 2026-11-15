@@ -5,7 +5,7 @@ from __future__ import annotations
 import argparse
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Protocol
+from typing import Any, Protocol, cast
 
 
 class Retriever(Protocol):
@@ -63,8 +63,10 @@ def build_qa_bot(
     embeddings = HuggingFaceEmbeddings(model_name=embedding_model)
     vector_store = FAISS.from_documents(documents=documents, embedding=embeddings)
     retriever = vector_store.as_retriever(search_kwargs={"k": top_k})
-    llm = HuggingFaceEndpoint(repo_id=llm_repo, temperature=0.2, max_new_tokens=256)
-    return RagQABot(retriever=retriever, llm=llm)
+    llm = HuggingFaceEndpoint(model=llm_repo, temperature=0.2, max_new_tokens=256)
+    # LangChain's concrete classes accept wider invoke() signatures than the
+    # narrow protocols this module needs; the subset used here is compatible.
+    return RagQABot(retriever=cast(Retriever, retriever), llm=cast(LanguageModel, llm))
 
 
 def main() -> int:

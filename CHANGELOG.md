@@ -1,5 +1,17 @@
 # Changelog
 
+## Unreleased — Install health
+
+- `make install` now succeeds on Intel macOS. `umap-learn` is a separate
+  `pplx-embed[umap]` extra because its `llvmlite` dependency has no Intel wheel,
+  and the projector already falls back to PCA without it.
+- Capped `opencv-python-headless` below 4.12 and NumPy below 2 on Intel macOS,
+  where the available torch 2.2 build targets the NumPy 1.x C ABI.
+- Updated `rag-qa-bot` for the current `HuggingFaceEndpoint` API (`model=`), and
+  narrowed two runtime types at the boundary instead of ignoring them.
+- `make check` now type-checks against the installed project dependencies, which
+  is how the API drift above was caught.
+
 ## Unreleased — Repository structure
 
 - Removed the five-line author header from every tracked file and from notebook

@@ -7,13 +7,14 @@ import json
 import os
 import tempfile
 from pathlib import Path
+from typing import cast
 
 import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
 import requests
 import streamlit as st
-from pplx_embed.scripts.export_projector import EmbeddingProjector
+from pplx_embed.scripts.export_projector import EmbeddingProjector, Method
 
 # ─── Config ─────────────────────────────────────────────────────────────────
 
@@ -581,8 +582,11 @@ with tab4:
 
     with col_cfg:
         st.markdown('<div class="card-title">Configuration</div>', unsafe_allow_html=True)
-        proj_method = st.selectbox(
-            "Méthode de réduction", ["umap", "pca", "tsne"], format_func=lambda x: x.upper()
+        proj_method = cast(
+            Method,
+            st.selectbox(
+                "Méthode de réduction", ["umap", "pca", "tsne"], format_func=lambda x: x.upper()
+            ),
         )
         proj_dim = st.radio("Dimensions", ["2D", "3D"], horizontal=True)
         n_clusters = st.slider("Clusters (K-Means)", 2, 12, 5)
@@ -668,7 +672,7 @@ with tab4:
                         target = Path(tmpdir) / "projector.html"
                         proj_obj.export_html(
                             output_path=str(target),
-                            method=proj_method,  # type: ignore[arg-type]
+                            method=proj_method,
                             include_3d=len(embeddings) >= 3,
                             n_clusters=n_clusters,
                             title="Embedding Projector — pplx-embed-v1",
