@@ -29,6 +29,17 @@ def test_pyproject_is_the_dependency_source() -> None:
     assert metadata["tool"]["setuptools"]["packages"]["find"]["where"] == ["src"]
 
 
+def test_umap_is_optional() -> None:
+    metadata = tomllib.loads((PROJECT_ROOT / "pyproject.toml").read_text(encoding="utf-8"))
+    extras = metadata["project"]["optional-dependencies"]
+
+    # dev must stay installable on platforms without an llvmlite wheel; the
+    # projector falls back to PCA when umap-learn is absent.
+    assert any("umap-learn" in dependency for dependency in extras["umap"])
+    assert not any("umap-learn" in dependency for dependency in extras["dev"])
+    assert not any("umap-learn" in dependency for dependency in extras["projector"])
+
+
 def test_dockerfiles_install_the_package() -> None:
     for name in ("Dockerfile.api", "Dockerfile.streamlit"):
         text = (PROJECT_ROOT / "docker" / name).read_text(encoding="utf-8")

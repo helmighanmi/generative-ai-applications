@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import sys
 from pathlib import Path
 
 import numpy as np
@@ -31,6 +32,13 @@ def test_projector_falls_back_to_pca_for_tiny_datasets() -> None:
     projector = EmbeddingProjector(embeddings)
     assert projector.reduce("umap", 2).shape == (2, 2)
     assert projector.reduce("tsne", 2).shape == (2, 2)
+
+
+def test_projector_falls_back_when_umap_is_unavailable(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setitem(sys.modules, "umap", None)
+    embeddings = np.random.default_rng(5).normal(size=(10, 8))
+    projector = EmbeddingProjector(embeddings)
+    assert projector.reduce("umap", 2).shape == (10, 2)
 
 
 def test_projector_rejects_mismatched_labels_and_categories() -> None:

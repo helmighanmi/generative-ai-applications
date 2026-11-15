@@ -23,7 +23,7 @@ dependencies = [
 rag-qa = "rag_qa_bot.qa_bot:main"
 
 [project.optional-dependencies]
-dev = ["pytest>=8.3,<10", "ruff==0.17.4"]
+dev = ["pytest>=8.3,<10", "ruff==0.17.4", "mypy>=1.15,<3"]
 
 [tool.setuptools.packages.find]
 where = ["src"]

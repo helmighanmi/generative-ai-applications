@@ -28,7 +28,7 @@ ai = [
   "transformers>=5.22,<6",
   "huggingface-hub>=1.31,<3",
 ]
-dev = ["pytest>=8.3,<10", "ruff==0.17.4"]
+dev = ["pytest>=8.3,<10", "ruff==0.17.4", "mypy>=1.15,<3"]
 
 [project.scripts]
 multimodal-rag = "multimodal_rag.cli:main"
