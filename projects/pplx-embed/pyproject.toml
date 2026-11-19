@@ -19,7 +19,7 @@ dependencies = [
   "torch>=2.2,<2.3; platform_system == 'Darwin' and platform_machine == 'x86_64'",
   # torch 2.2 on Intel macOS is built against the NumPy 1.x C ABI.
   "numpy>=1.26,<3; platform_system != 'Darwin' or platform_machine != 'x86_64'",
-  "numpy>=1.26,<2; platform_system == 'Darwin' and platform_machine == 'x86_64'",
+  "numpy>=1.26,<3; platform_system == 'Darwin' and platform_machine == 'x86_64'",
   "huggingface-hub>=1.31,<3",
   "fastapi>=0.115,<1",
   "uvicorn[standard]>=0.30,<1",
